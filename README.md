@@ -1,1 +1,1 @@
-# Student Smart Hmes
+# Student Smart Homes
