@@ -27,4 +27,4 @@ jobs:
           cache: "gradle"
 
       - name: "Build project"
-        run: ./gradlew build
+        run: ./gradlew --no-daemon build
