@@ -2,7 +2,7 @@ name: "Java"
 
 on: 
   pull_request:
-    braches:
+    branches:
       - main
   workflow_dispatch:
 
