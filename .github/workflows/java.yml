@@ -29,3 +29,8 @@ jobs:
 
       - name: "Build project"
         run: ./gradlew --no-daemon build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: build/distributions/ssh-recipes.zip
+          name: ssh-java-${{ matrix.java-version }}-${{ matrix.os }}
