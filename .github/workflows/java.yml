@@ -12,6 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
         java-version: [17, 21]
         os: ["ubuntu-latest", "windows-latest"]
@@ -28,3 +29,9 @@ jobs:
 
       - name: "Build project"
         run: ./gradlew --no-daemon build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ssh-java-${{ matrix.java-version }}-${{ matrix.os }}
+          path: app/build/libs
