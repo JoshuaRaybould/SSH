@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     jacoco
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 
@@ -25,11 +26,18 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+}
+
+javafx{
+    version = "20.0.2"
+    modules("javafx.controls", "javafx.fxml")
 }
 
 application {
     // Define the main class for the application.
     mainClass = "org.example.App"
+  
 }
 
 tasks.named<Test>("test") {
