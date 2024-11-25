@@ -27,12 +27,6 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
 
-    //JavaFX modules
-    implementation("org.openjfx:javafx-controls:20.0.2")
-    implementation("org.openjfx:javafx-fxml:20.0.2")
-    implementation("org.openjfx:javafx-base:20.0.2")
-
-
 }
 
 javafx{
