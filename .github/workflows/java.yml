@@ -30,7 +30,7 @@ jobs:
       - name: "Build project"
         run: ./gradlew --no-daemon build
 
-      - name: Upload build artifacts
+      - name: "Upload build artifacts"
         uses: actions/upload-artifact@v4
         with:
           name: ssh-java-${{ matrix.java-version }}-${{ matrix.os }}
