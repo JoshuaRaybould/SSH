@@ -35,3 +35,12 @@ jobs:
         with:
           name: ssh-java-${{ matrix.java-version }}-${{ matrix.os }}
           path: app/build/libs
+
+      - name: "Produce distribution"
+        run: ./gradlew distZip
+        
+      - uses: actions/upload-artifact@v4
+        with:
+          path: build/distributions/SSH.zip
+          name: rps-java-${{ matrix.java-version }}
+       
