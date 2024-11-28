@@ -30,8 +30,11 @@ jobs:
       - name: "Build project"
         run: ./gradlew --no-daemon build
 
+      - name: "Produce distribution"
+        run: ./gradlew distZip
+
       - name: "Upload build artifacts"
         uses: actions/upload-artifact@v4
         with:
           name: ssh-java-${{ matrix.java-version }}-${{ matrix.os }}
-          path: app/build/libs
+          path: app/build/distributions/app.zip
