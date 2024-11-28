@@ -1,30 +1,32 @@
+package org.example;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class Ingredients {
-    private String name;
-    private LocalDateTime capturedDate;
-    private int estimatedShelfLife;
+    private final String name;
+    private final LocalDateTime capturedDate;
+    private final int estimatedShelfLife;
 
-
-    public Ingredients(String name, LocalDate capturedDate, int estimatedShelfLife){
+    public Ingredients(String name, LocalDate capturedDate, int estimatedShelfLife) {
         this.name = name;
         this.capturedDate = capturedDate.atStartOfDay();
         this.estimatedShelfLife = estimatedShelfLife;
     }
 
     public double calculateQuality() {
-        long daysSinceCaptured = ChronoUnit.MINUTES.between(capturedDate, LocalDate.now()); //in reality this wouldbe days, but for the sake of testing, we will use minutes
-        
-        if (daysSinceCaptured > estimatedShelfLife * 1440) {
-            return 0;
+        long minutesSinceCaptured = ChronoUnit.MINUTES.between(capturedDate, LocalDateTime.now()); // testing in minutes
+        long shelfLifeInMinutes = estimatedShelfLife * 1440L; // convert days to minutes
+
+        if (minutesSinceCaptured > shelfLifeInMinutes) {
+            return 0.0;
         }
-        return Math.max(0, 1 - ((double) daysSinceCaptured / (estimatedShelfLife + 1) * 1440));
+
+        return Math.max(0.0, 1.0 - ((double) minutesSinceCaptured / shelfLifeInMinutes));
     }
 
     public String getName() {
         return name;
     }
-   
 }
