@@ -1,6 +1,6 @@
 package org.example;
 
-import java.time.LocalDate;
+//import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -9,9 +9,9 @@ public class Ingredients {
     private final LocalDateTime capturedDate;
     private final int estimatedShelfLife;
 
-    public Ingredients(String name, LocalDate capturedDate, int estimatedShelfLife) {
+    public Ingredients(String name, LocalDateTime capturedDate, int estimatedShelfLife) {
         this.name = name;
-        this.capturedDate = capturedDate.atStartOfDay();
+        this.capturedDate = capturedDate;
         this.estimatedShelfLife = estimatedShelfLife;
     }
 
