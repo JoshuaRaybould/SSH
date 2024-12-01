@@ -31,5 +31,11 @@ CREATE TABLE recipes (
 CREATE TABLE recipes_fridge_items (
     recipe_id integer NOT NULL references recipes(recipe_id),
     fridge_item_id integer NOT NULL references fridge_items(fridge_item_id),
+    required_quantity integer NOT NULL,
     PRIMARY KEY (recipe_id, fridge_item_id)
 );
+
+COPY fridge_items
+FROM '/docker-entrypoint-initdb.d/ingredients.csv'
+DELIMITER ','
+CSV HEADER;

@@ -18,7 +18,7 @@ services:
     environment:
       POSTGRES_PASSWORD: example
     volumes: 
-      - ./databaseSSH.sql:/docker-entrypoint-initdb.d/databaseSSH.sql
+      - ./database:/docker-entrypoint-initdb.d
 
   adminer:
     image: adminer
