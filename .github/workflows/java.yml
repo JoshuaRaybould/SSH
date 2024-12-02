@@ -27,6 +27,9 @@ jobs:
           java-version: ${{ matrix.java-version }}
           cache: "gradle"
 
+      - name: "Start database"
+        run: docker compose -f docker-compose.yml up -d
+
       - name: "Build project"
         run: ./gradlew --no-daemon build
 
