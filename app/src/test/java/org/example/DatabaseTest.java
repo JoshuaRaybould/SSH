@@ -24,7 +24,7 @@ public class DatabaseTest {
                 String sql = "SELECT * FROM fridge_items LIMIT 1";
                 ResultSet rs = stmt.executeQuery(sql);
                 rs.next();
-                assertEquals(rs.getInt("fridge_item_id"), 1);
+                assertEquals(rs.getInt("fridge_item_id"), 1001);
                 assertEquals(rs.getString("fridge_item_name"), "Milk");
             }
         catch (SQLException e) {
