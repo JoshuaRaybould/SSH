@@ -9,13 +9,12 @@ on:
 jobs:
   build:
     name: "Build"
-    runs-on: ${{ matrix.os }}
+    runs-on: "ubuntu-latest"
 
     strategy:
       fail-fast: false
       matrix:
         java-version: [17, 21]
-        os: ["ubuntu-latest", "windows-latest"]
 
     steps: 
       - name: "Clone repository"
@@ -27,6 +26,9 @@ jobs:
           java-version: ${{ matrix.java-version }}
           cache: "gradle"
 
+      - name: "Start database"
+        run: docker compose -f docker-compose.yml up -d
+
       - name: "Build project"
         run: ./gradlew --no-daemon build
 
@@ -36,5 +38,5 @@ jobs:
       - name: "Upload build artifacts"
         uses: actions/upload-artifact@v4
         with:
-          name: ssh-java-${{ matrix.java-version }}-${{ matrix.os }}
+          name: ssh-java-${{ matrix.java-version }}
           path: app/build/distributions/app.zip

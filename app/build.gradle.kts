@@ -27,6 +27,9 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
 
+    // To connect to postgres
+    runtimeOnly("org.postgresql:postgresql:42.6.0")
+    
 }
 
 javafx{
