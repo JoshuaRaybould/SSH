@@ -39,3 +39,8 @@ COPY fridge_items
 FROM '/docker-entrypoint-initdb.d/ingredients.csv'
 DELIMITER ','
 CSV HEADER;
+
+COPY recipes
+FROM '/docker-entrypoint-initdb.d/recipes.csv'
+DELIMITER ','
+CSV HEADER;
