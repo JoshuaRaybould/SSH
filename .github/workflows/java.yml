@@ -30,7 +30,14 @@ jobs:
         run: docker compose -f docker-compose.yml up -d
 
       - name: "Build project"
-        run: ./gradlew --no-daemon build
+        run: ./gradlew app:compileJava
+        
+      - name: "Database test"
+        run: ./gradlew test --tests org.example.DatabaseTest
+        
+      - name: "Quality test"
+        run: ./gradlew test --tests org.example.IngredientsTest
+        
 
       - name: "Produce distribution"
         run: ./gradlew distZip
