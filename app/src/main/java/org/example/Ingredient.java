@@ -22,6 +22,10 @@ public class Ingredient {
         this.quality = quality;
     }
 
+    public Ingredient() {
+
+    }
+
     public double calculateQuality() {
         long daysSinceCaptured = ChronoUnit.DAYS.between(capturedDate, LocalDate.now()); // testing in days
         //long shelfLifeInMinutes = estimatedShelfLife * 1440L; // using days
@@ -33,12 +37,24 @@ public class Ingredient {
         return Math.max(0.0, 1.0 - ((double) daysSinceCaptured / estimatedShelfLife));
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setQuality(double quality) {
+        this.quality = quality;
     }
 
     public double getQuality() {
