@@ -22,20 +22,24 @@ public class App {
 
                 String[] commandParts = command.split(" ");
                 if (commandParts.length != 2) {
-                    System.out.println("Usage:tenantID ingredients");
-                    System.out.println("example:1 ingredients");
+                    System.out.println("Usage:tenantID i");
+                    System.out.println("example:1 i");
                 } else {
                     try {
-                        Integer.parseInt(commandParts[0]);
+                        int tenantID = Integer.parseInt(commandParts[0]);
                         if (commandParts[1].equals("ingredients") || commandParts[1].equals("i")) {
-                            System.out.println("Tenant with id " + commandParts[0] + " has the following ingedients");
-                            TenantIngredients tenant1 = new TenantIngredients(1);
-                            for (Ingredient ing: tenant1.getIngredients()) {
-                                System.out.println("Name:" + ing.getName() + ", Quantity:" + ing.getQuantity() + ", Quality:" + ing.getQuality());
+                            TenantIngredients tenant1 = new TenantIngredients(tenantID);
+                            if (tenant1.getTenantName().equals("")) {
+                                System.out.println("Tenant doesn't exist");
+                            } else {
+                                System.out.println("Tenant with id " + commandParts[0] + ", " + tenant1.getTenantName() + ", has the following ingedients");
+                                for (Ingredient ing: tenant1.getIngredients()) {
+                                    System.out.println("Name:" + ing.getName() + ", Quantity:" + ing.getQuantity() + ", Quality:" + ing.getQuality());
+                                }
                             }
                         } else {
-                            System.out.println("Usage:tenantID ingredients");
-                            System.out.println("example:1 ingredients");
+                            System.out.println("Usage:tenantID i");
+                            System.out.println("example:1 i");
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Please type a valid user id.");
