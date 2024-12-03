@@ -35,6 +35,8 @@ CREATE TABLE recipes_fridge_items (
     PRIMARY KEY (recipe_id, fridge_item_id)
 );
 
+-- INSERT INTO tenants (tenant_id, tenant_name) VALUES (1, 'Jamal');
+
 COPY fridge_items
 FROM '/docker-entrypoint-initdb.d/ingredients.csv'
 DELIMITER ','
@@ -44,3 +46,14 @@ COPY recipes
 FROM '/docker-entrypoint-initdb.d/recipes.csv'
 DELIMITER ','
 CSV HEADER;
+
+COPY tenants
+FROM '/docker-entrypoint-initdb.d/tenants.csv'
+DELIMITER ','
+CSV HEADER;
+
+COPY tenants_fridge_items
+FROM '/docker-entrypoint-initdb.d/tenants_fridge_items.csv'
+DELIMITER ','
+CSV HEADER;
+
