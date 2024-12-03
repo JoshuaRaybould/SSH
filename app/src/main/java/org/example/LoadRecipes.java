@@ -17,8 +17,12 @@ public class LoadRecipes {
                                 new String[] {"stir fry","broccoli","oil","carrots","pepper", "soy sauce"},
                                 new int[] {500,3,10,7,7,15});
         
-                                
-    public Recipe[] ReturnRecipe(){
+
+    public Recipe[] ReturnRecipes(){
         return new Recipe[] {recipe1, recipe2,recipe3};
+    }
+
+    public LoadRecipes(){
+
     }
 }
