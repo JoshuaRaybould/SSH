@@ -31,14 +31,7 @@ estimated\_shelf\_life
 tenant\_id \
 tenant\_name 
 
-“recipes”: \
-recipe\_id \
-recipe\_name \
-recipe\_instructions 
 
-"recipes_items": \
-recipe\_id \
-item\_id
 
 (Possibly)” Recipe Log Book: 
 
@@ -51,11 +44,7 @@ Changing the calculations as we have come across some problems. The intention is
 New conditions being implemented too.  
 
 M: Recipe match rating, ranging from 0-100% \
-M = (Sum of U/ N)\
-N: Number of fridge ingredients 
-
-U: If ingredient unavailable or Q=0 then 0 \
-&nbsp;&nbsp;&nbsp;&nbsp; else U = 1 – Q   
+M first being based on a user having all the items, then secondarily based off the average quality \ 
 
 Q: Quality of the ingredient, ranging from 0-100% \
 Q = (1 - Days since captured/Estimated Shelf Life + 1) 
@@ -72,6 +61,10 @@ Manual population of items: Arman \
 Recipes: Ben \
 Logic to randomly generate items: Arman \
 Logic to calculate Quality (and put data into database): Jamal \
-Logic to get it out the database and calculate and M value: Jamal \
-Web API: Josh \
-JavaFX: Ben 
+Logic to get users ingredients with quantity and quality values: Josh \
+Create function to return the recipes based on a list of ingredients: Ben \
+Logic to rank recipes based on a user having all items, then quality: Jamal \
+Look into integration testing, set up unit tests, put results of functions in a file for testing \
+
+
+
