@@ -32,20 +32,23 @@ jobs:
       - name: "Build project"
         run: ./gradlew app:compileJava
         
-      - name: "Basic tests"
-        run: ./gradlew test --tests org.example.DatabaseTest --tests org.example.LoadRecipeTest
-        
-      - name: "Quality test"
-        run: ./gradlew test --tests org.example.IngredientsTest
-
-      - name: "Ingredients test"
-        run: ./gradlew test --tests org.example.TenantIngredientsTest
+      - name: "Tests"
+        run: ./gradlew test
         
       - name: "Test coverage"
         run: ./gradlew jacocoTestCoverageVerification
 
+      - name: "Generate test coverage report"
+        run: ./gradlew jacocoTestReport
+
       - name: "Produce distribution"
         run: ./gradlew distZip
+
+      - name: "Upload test coverage artifact"
+        uses: actions/upload-artfact@v4
+        with:
+          name: code-coverage-java-${{ matrix.java-version }}
+          path: app/build/reports/jacoco/test/html/index.html
 
       - name: "Upload build artifacts"
         uses: actions/upload-artifact@v4
