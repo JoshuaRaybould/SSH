@@ -41,6 +41,8 @@ jobs:
       - name: "Ingredients test"
         run: ./gradlew test --tests org.example.TenantIngredientsTest
         
+      - name: "Test coverage"
+        run: ./gradlew jacocoTestCoverageVerification
 
       - name: "Produce distribution"
         run: ./gradlew distZip
