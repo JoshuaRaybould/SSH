@@ -55,9 +55,7 @@ tasks.jacocoTestReport {
         html.required = true
     }
 
-    sourceDirectories.from = files([
-        "$project.projectDir/src/main/java",
-    ])
+    sourceSets(sourceSets.main.get())
 }
 
 tasks.jacocoTestCoverageVerification {
