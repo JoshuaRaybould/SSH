@@ -45,7 +45,7 @@ jobs:
         run: ./gradlew distZip
 
       - name: "Upload test coverage artifact"
-        uses: actions/upload-artfact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage-java-${{ matrix.java-version }}
           path: app/build/reports/jacoco/test/html/index.html
