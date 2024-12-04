@@ -32,11 +32,14 @@ jobs:
       - name: "Build project"
         run: ./gradlew app:compileJava
         
-      - name: "Database test"
-        run: ./gradlew test --tests org.example.DatabaseTest
+      - name: "Basic tests"
+        run: ./gradlew test --tests org.example.DatabaseTest --tests org.example.LoadRecipeTest
         
       - name: "Quality test"
         run: ./gradlew test --tests org.example.IngredientsTest
+
+      - name: "Ingredients test"
+        run: ./gradlew test --tests org.example.TenantIngredientsTest
         
 
       - name: "Produce distribution"
