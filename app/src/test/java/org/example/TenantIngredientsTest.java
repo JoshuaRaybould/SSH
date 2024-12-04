@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class TenantIngredientsTest {
     
     @Test
-    public void testDataTypes(){
+    public void testGetTestUserIngredients(){
         int tenantId = 1; // The id of our test user
         MemoryIngredients output = new MemoryIngredients();
         App.printTenantIngredients(output, tenantId);
@@ -23,6 +23,7 @@ public class TenantIngredientsTest {
         assertEquals("Name:Milk, Quantity:1000, Quality:0.0", ingedientStrings.get(0));
         assertEquals("Name:Jam, Quantity:500, Quality:0.0", ingedientStrings.get(6));
         assertEquals("Name:Paprika, Quantity:500, Quality:0.0", ingedientStrings.get(ingedientStrings.size()-1));
+
         /*Expected output is:
         Tenant with id 1, Jamal, has the following ingedients
         Name:Milk, Quantity:1000, Quality:0.0
@@ -40,9 +41,25 @@ public class TenantIngredientsTest {
         Name:Black Pepper, Quantity:500, Quality:0.0
         Name:Paprika, Quantity:500, Quality:0.0 
 
-        We just test the first last and some random middle value is correct.
+        We just test the first last and some middle value is correct.
         */
 
     }
+
+    @Test
+    public void testNonExistantUser(){
+        int tenantId = 1000; // The id of a nonexistant user
+        MemoryIngredients output = new MemoryIngredients();
+        App.printTenantIngredients(output, tenantId);
+
+        List<String> ingedientStrings = output.getIngredientStrings();
+        
+        // Check we fail appropriately
+        assertEquals("", output.getTenantString());
+        assertEquals(0, ingedientStrings.size());
+
+
+    }
+
 }
 

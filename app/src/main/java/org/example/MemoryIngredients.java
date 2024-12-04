@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MemoryIngredients implements IIngredientsOutput{
-    private String tenantString;
+    private String tenantString = "";
     private List<String> ingedientStrings;
 
     @Override
