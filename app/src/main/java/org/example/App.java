@@ -27,20 +27,8 @@ public class App {
                 } else {
                     try {
                         int tenantID = Integer.parseInt(commandParts[0]);
-                        if (commandParts[1].equals("ingredients") || commandParts[1].equals("i")) {
-                            TenantIngredients tenant1 = new TenantIngredients(tenantID);
-                            if (tenant1.getTenantName().equals("")) {
-                                System.out.println("Tenant doesn't exist");
-                            } else {
-                                System.out.println("Tenant with id " + commandParts[0] + ", " + tenant1.getTenantName() + ", has the following ingedients");
-                                for (Ingredient ing: tenant1.getIngredients()) {
-                                    System.out.println("Name:" + ing.getName() + ", Quantity:" + ing.getQuantity() + ", Quality:" + ing.getQuality());
-                                }
-                            }
-                        } else {
-                            System.out.println("Usage:tenantID i");
-                            System.out.println("example:1 i");
-                        }
+                        carryOutCommands(tenantID, commandParts[1]);
+
                     } catch (NumberFormatException e) {
                         System.out.println("Please type a valid user id.");
                     }
@@ -49,5 +37,18 @@ public class App {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static void carryOutCommands(int tenantID, String command) {
+        if (command.equals("ingredients") || command.equals("i")) {
+            printTenantIngredients(new StdoutIngredients(), tenantID);
+        } else {
+            System.out.println("Usage:tenantID i");
+            System.out.println("example:1 i");
+        }
+    }
+
+    public static void printTenantIngredients(IIngredientsOutput output, int tenantID) {
+        output.reportIngredients(tenantID);
     }
 }
