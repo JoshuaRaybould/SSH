@@ -34,7 +34,6 @@ jobs:
         
       - name: "Basic tests"
         run: ./gradlew test --tests org.example.DatabaseTest --tests org.example.LoadRecipeTest
-             ./gradlew
         
       - name: "Quality test"
         run: ./gradlew test --tests org.example.IngredientsTest
