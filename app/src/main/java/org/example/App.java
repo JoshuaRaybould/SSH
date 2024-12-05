@@ -42,7 +42,9 @@ public class App {
     public static void carryOutCommands(int tenantID, String command) {
         if (command.equals("ingredients") || command.equals("i")) {
             printTenantIngredients(new StdoutIngredients(), tenantID);
-        } else {
+        } else if (command.equals("rankrecipes") || command.equals("r")){
+            RecipeRanking.displayRankedRecipes(tenantID);
+        }else{
             System.out.println("Usage:tenantID i");
             System.out.println("example:1 i");
         }
