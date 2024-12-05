@@ -29,25 +29,37 @@ public class RecipeRanking {
     private static double calculateRecipeQuality(Recipe recipe, List<Ingredient> userIngredients) {
         String[] recipeIngredients = recipe.getIngredients();
         int[] requiredQuantities = recipe.getQuantities();
-
+    
         double totalQuality = 0;
         int matchedCount = 0;
-
+        int totalIngredients = recipeIngredients.length;
+    
         for (int i = 0; i < recipeIngredients.length; i++) {
             String requiredIngredient = recipeIngredients[i];
             int requiredQuantity = requiredQuantities[i];
-
+    
             Ingredient userIngredient = findUserIngredient(requiredIngredient, userIngredients);
-            if (userIngredient == null || userIngredient.getQuantity() < requiredQuantity) {
-                return -1; // Missing ingredient or insufficient quantity
+            if (userIngredient != null && userIngredient.getQuantity() >= requiredQuantity) {
+                totalQuality += userIngredient.getQuality();
+                matchedCount++;
             }
-
-            totalQuality += userIngredient.getQuality();
-            matchedCount++;
         }
-
-        return matchedCount > 0 ? totalQuality / matchedCount : 0;
+    
+        double proportionMatched = (double) matchedCount / totalIngredients;
+    
+        // thresholds based on the number of ingredients.
+        double threshold = totalIngredients <= 3 ? 0.5 : 
+                           totalIngredients <= 6 ? 0.6 : 
+                           0.7; // recipes with many ingredients require at least 70% match.
+    
+        
+        if (proportionMatched >= threshold) {
+            // calc average quality for matched ingredients.
+            return totalQuality / matchedCount * proportionMatched; // weight by proportion matched.
+        }
+        return 0; 
     }
+    
 
     private static Ingredient findUserIngredient(String ingredientName, List<Ingredient> userIngredients) {
         for (Ingredient ingredient : userIngredients) {
