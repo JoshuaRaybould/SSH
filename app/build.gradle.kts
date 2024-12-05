@@ -29,6 +29,11 @@ dependencies {
 
     // To connect to postgres
     runtimeOnly("org.postgresql:postgresql:42.6.0")
+
+    /*Add Mockito for mocking in tests - using Mockito to make our tests more focused and reliable by isolating the logic we’re testing. 
+    //It lets us replace external dependencies (like the database calls in TenantIngredients) with mock objects that return controlled data. 
+    This way, we can test just the recipe ranking logic without worrying about the database or other external factors, making the tests easier to manage and quicker */
+    testImplementation("org.mockito:mockito-core:5.4.0")
     
 }
 
