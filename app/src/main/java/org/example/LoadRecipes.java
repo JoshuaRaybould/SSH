@@ -32,8 +32,8 @@ public class LoadRecipes {
     public ArrayList<Recipe> LoadMatchedRecipes(int tenant_id){
 
         TenantIngredients tenant = new TenantIngredients(tenant_id); //creates a tenant based on tenant_id
-        userIngredients = new ArrayList<>();
-        matchedRecipes = new ArrayList<>();
+        userIngredients = new ArrayList<Ingredient>();
+        matchedRecipes = new ArrayList<Recipe>();
         userIngredients = tenant.getIngredients();// retrieves tenants ingredients into an array list
 
         System.out.println("size: " + userIngredients.size());//test case
@@ -43,9 +43,9 @@ public class LoadRecipes {
         for (Recipe recipes : currentRecipes){ //goes through all the recipes in the current recipes
 
             boolean Matched = false;
-
             int count = 0; //used to check if match and then resets when back to 0
             String [] recipe_ingredients = recipes.getIngredients();//stores ingredients of current recipe into an array
+            
             for (Ingredient currentIngredient : userIngredients){ //goes through all the users ingredients 
 
                 //System.out.println(currentIngredient);
