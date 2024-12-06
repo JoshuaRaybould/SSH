@@ -32,8 +32,10 @@ public class LoadRecipes {
     public ArrayList<Recipe> LoadMatchedRecipes(int tenant_id){
 
         TenantIngredients tenant = new TenantIngredients(tenant_id); //creates a tenant based on tenant_id
+
         userIngredients = new ArrayList<Ingredient>();
         matchedRecipes = new ArrayList<Recipe>();
+
         userIngredients = tenant.getIngredients();// retrieves tenants ingredients into an array list
 
         System.out.println("size: " + userIngredients.size());//test case
