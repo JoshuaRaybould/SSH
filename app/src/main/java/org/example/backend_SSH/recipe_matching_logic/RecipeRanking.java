@@ -1,8 +1,13 @@
-package org.example;
+package org.example.backend_SSH.recipe_matching_logic;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import org.example.backend_SSH.ingredient_logic.Ingredient;
+import org.example.backend_SSH.ingredient_logic.TenantIngredients;
+import org.example.recipes_system.LoadRecipes;
+import org.example.recipes_system.Recipe;
 
 public class RecipeRanking {
 
@@ -88,21 +93,3 @@ public class RecipeRanking {
 
     
 } 
-
-class RankedRecipe {
-    private Recipe recipe;
-    private double qualityScore;
-
-    public RankedRecipe(Recipe recipe, double qualityScore) {
-        this.recipe = recipe;
-        this.qualityScore = qualityScore;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public double getQualityScore() {
-        return qualityScore;
-    }
-}

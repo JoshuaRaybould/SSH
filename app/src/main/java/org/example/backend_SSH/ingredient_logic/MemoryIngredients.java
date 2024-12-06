@@ -1,7 +1,8 @@
-package org.example;
+package org.example.backend_SSH.ingredient_logic;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MemoryIngredients implements IIngredientsOutput{
     private String tenantString = "";

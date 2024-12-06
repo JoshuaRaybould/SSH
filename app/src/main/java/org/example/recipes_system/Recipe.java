@@ -1,4 +1,4 @@
-package org.example;
+package org.example.recipes_system;
 
 public class Recipe {
 

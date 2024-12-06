@@ -4,6 +4,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.example.backend_SSH.recipe_matching_logic.RankedRecipe;
+import org.example.backend_SSH.recipe_matching_logic.RecipeRanking;
 import org.junit.jupiter.api.Test;
 //import static org.mockito.Mockito.mock;
 //import static org.mockito.Mockito.when;

@@ -9,6 +9,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.example.backend_SSH.ingredient_logic.IIngredientsOutput;
+import org.example.backend_SSH.ingredient_logic.StdoutIngredients;
+import org.example.backend_SSH.recipe_matching_logic.RecipeRanking;
+
 // To get a user's ingredients type, tenantid i or tenantid ingredients
 public class App {
     public static void main(String[] args) {

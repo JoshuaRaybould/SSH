@@ -1,4 +1,4 @@
-package org.example;
+package org.example.backend_SSH.ingredient_logic;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.backend_SSH.ingredient_logic;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
