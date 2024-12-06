@@ -5,17 +5,24 @@ import java.util.List;
 
 public class MemoryIngredients implements IIngredientsOutput{
     private String tenantString = "";
-    private List<String> ingedientStrings;
+    private List<String> ingedientStrings; // This is for use with test user
+    private List<Ingredient> ingredients;
 
     @Override
     public void reportIngredients(int tenantId) {
-        TenantIngredients tenant1 = new TenantIngredients(tenantId);
-        if (!tenant1.getTenantName().equals("")) {
-            tenantString = "Tenant with id " + tenantId + ", " + tenant1.getTenantName() + ", has the following ingedients";
-            for (Ingredient ing: tenant1.getIngredients()) {
-                ingedientStrings.add("Name:" + ing.getName() + ", Quantity:" + ing.getQuantity() + ", Quality:" + ing.getQuality());
+        Tenant tenant = new Tenant(tenantId);
+        String tenantName = tenant.getTenantName();
+        TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
+        ingredients = tenantIngredients.getIngredients();
+
+        if (tenantId == 1) { // If we are the test user
+            if (!tenantName.equals("")) {
+                tenantString = "Tenant with id " + tenantId + ", " + tenantName + ", has the following ingedients";
+                for (Ingredient ingredient: ingredients) {
+                    ingedientStrings.add("Name:" + ingredient.getName() + ", Quantity:" + ingredient.getQuantity() + ", Quality:" + ingredient.getQuality());
+                }
             }
-        }
+        } 
     }
 
     public MemoryIngredients() {
@@ -28,6 +35,10 @@ public class MemoryIngredients implements IIngredientsOutput{
 
     public List<String> getIngredientStrings() {
         return ingedientStrings;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
     
 }
