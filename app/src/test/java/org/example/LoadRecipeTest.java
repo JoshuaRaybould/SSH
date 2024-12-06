@@ -1,6 +1,8 @@
 package org.example;
 
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +13,8 @@ public class LoadRecipeTest {
         LoadRecipes loadRecipes = new LoadRecipes();
 
         Recipe[] recipes = loadRecipes.ReturnRecipes();
+
+        ArrayList<Recipe> matched = loadRecipes.LoadMatchedRecipes(1);
 
         Recipe recipe1 = recipes[0];
 
@@ -24,5 +28,9 @@ public class LoadRecipeTest {
 
         
         assertTrue(recipe1.getQuantities() instanceof int[], "Quantities should be an int array");
+
+        assertTrue(loadRecipes.LoadMatchedRecipes(1) instanceof ArrayList, "Matched recipes should be a Recipe array data type");
+
+        assertTrue(matched.get(0) instanceof Recipe, "Entries should be Recipe");
     }
 }
