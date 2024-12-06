@@ -6,9 +6,6 @@ public class LoadRecipes {
 
     private ArrayList<Ingredient> userIngredients;
     private ArrayList<Recipe> matchedRecipes;
-    
-
-
     Recipe recipe1 = new Recipe("Lemon Chicken", 
                                 "Marinate chicken with lemon juice, minced garlic, olive oil and pepper. Bake or pan-fry until it's golden and cooked through.",
                                 new String[] {"Chicken","Lemons","Garlic","Oil"," Black Pepper"},
