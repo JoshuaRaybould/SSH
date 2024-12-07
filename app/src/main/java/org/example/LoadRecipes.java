@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+
 public class LoadRecipes {
 
     Recipe recipe1 = new Recipe("Lemon Chicken", 
@@ -22,7 +24,45 @@ public class LoadRecipes {
         return new Recipe[] {recipe1, recipe2,recipe3};
     }
 
-    public LoadRecipes(){
+    public ArrayList<Recipe> LoadMatchedRecipes(int tenant_id){
 
+        TenantIngredients tenant = new TenantIngredients(tenant_id); //creates a tenant based on tenant_id
+
+        ArrayList<Ingredient> userIngredients = new ArrayList<Ingredient>();
+        ArrayList<Recipe> matchedRecipes = new ArrayList<Recipe>();
+
+        userIngredients = tenant.getIngredients();// retrieves tenants ingredients into an array list
+
+        System.out.println("size: " + userIngredients.size());//test case
+
+        Recipe [] currentRecipes = ReturnRecipes(); //returns an array of recipes
+
+        for (Recipe recipes : currentRecipes){ //goes through all the recipes in the current recipes
+
+            boolean Matched = false;
+            String [] recipe_ingredients = recipes.getIngredients();//stores ingredients of current recipe into an array
+            
+            for (Ingredient currentIngredient : userIngredients){ //goes through all the users ingredients 
+
+                //System.out.println(currentIngredient);
+
+                for (String each_recipe_ingredient : recipe_ingredients){//goes through each ingredient in recipe
+
+                    if (each_recipe_ingredient.equalsIgnoreCase(currentIngredient.getName())){ //checks if the recipe ingredient matches the user ingredient
+                        Matched = true;
+                        break;
+                    }
+                }
+                if (Matched){
+                    matchedRecipes.add(recipes); //adds recipe to matched recipes list if there is a 
+                    break;
+                }
+            }
+        } 
+       return matchedRecipes;
+    }
+
+    public LoadRecipes(){
+        
     }
 }
