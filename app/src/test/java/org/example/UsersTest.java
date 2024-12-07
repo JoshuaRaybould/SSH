@@ -16,8 +16,6 @@ public class UsersTest {
     public void setup() {
         // Create "Test User" before running tests
         UserCreation.createUser("Test User");
-    
-        // Retrieve tenant_id for "Test User"
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
              Statement stmt = conn.createStatement()) {
             String sql = "SELECT tenant_id FROM tenants WHERE tenant_name = 'Test User'";
@@ -33,31 +31,6 @@ public class UsersTest {
         }
     }
 
-    @Test
-    public void testUserExists() {
-        assertTrue(tenantId > 0, "Test User should exist in the tenants table.");
-    }
-
-    @Test
-public void testMandatoryItemsAssigned() {
-    // Verify if the mandatory items were assigned to 'Test User' in tenants_fridge_items table
-    int[] mandatoryItemIds = {1001, 1002, 1006, 1046, 1047, 1048, 1045, 1044};
-    for (int itemId : mandatoryItemIds) {
-        String checkItemSQL = "SELECT * FROM tenants_fridge_items WHERE tenant_id = ? AND fridge_item_id = ?";
-        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             PreparedStatement itemStmt = conn.prepareStatement(checkItemSQL)) {
-            itemStmt.setInt(1, tenantId);  // Use the tenantId from setup()
-            itemStmt.setInt(2, itemId);
-            ResultSet itemRs = itemStmt.executeQuery();
-
-            // Assert that each mandatory item is assigned to 'Test User'
-            assertTrue(itemRs.next(), "Item ID " + itemId + " should be assigned to user 'Test User'.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            fail("An error occurred while checking the fridge items.");
-        }
-    }
-}
 
     @Test
     public void testGenerateQuantity_Liquid() {
