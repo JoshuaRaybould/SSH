@@ -88,10 +88,17 @@ public class UserCreation {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        
+        // Automatically create a 'Test User'
+        createUser("Test User");
+        System.out.println("Test User created successfully!");
+
+        // Prompt for a new user
         System.out.print("Enter the name of the user to create: ");
         String userName = scanner.nextLine();
         createUser(userName);
         System.out.println("User created successfully!");
+        
         scanner.close();
     }
 }
