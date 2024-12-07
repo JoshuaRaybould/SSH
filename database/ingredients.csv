@@ -32,7 +32,7 @@ fridge_item_id,fridge_item_name,fridge_item_price,estimated_shelf_life,food_type
 1031,Olives,2.2,14,unit
 1032,Pickles,2,60,unit
 1033,Sweetcorn,1,5,unit
-1034,Salad,1.3,5,solid,
+1034,Salad,1.3,5,solid
 1035,Chilled Pasta,1.5,5,solid
 1036,Sausages,2.5,7,unit
 1037,Salmon,5.5,2,unit
