@@ -9,7 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     jacoco
-    id("org.openjfx.javafxplugin") version "0.1.0"
+    //id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 
@@ -27,6 +27,9 @@ dependencies {
     // This dependency is used by the application.
     implementation(libs.guava)
 
+    // For command line arguments
+    implementation("info.picocli:picocli:4.7.6")
+
     // To connect to postgres
     runtimeOnly("org.postgresql:postgresql:42.6.0")
 
@@ -36,16 +39,20 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.4.0")
     
 }
-
+/*
 javafx{
     version = "20.0.2"
     modules("javafx.controls", "javafx.fxml")
-}
+}*/
 
 application {
     // Define the main class for the application.
     mainClass = "org.example.App"
   
+}
+
+tasks.named<JavaExec>("run") {
+    standardInput = System.`in` 
 }
 
 tasks.named<Test>("test") {
