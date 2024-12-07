@@ -3,6 +3,7 @@ package org.example;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.sql.*;
 
 public class UsersTest {
@@ -13,34 +14,26 @@ public class UsersTest {
     private int tenantId;
 
     @BeforeEach
-    public void setUp() {
-        // Ensure 'Test User' is created before the tests run
+    public void setup() {
+        // Create "Test User" before running tests
         UserCreation.createUser("Test User");
 
-        // Retrieve the tenant_id for 'Test User' from the database
-        tenantId = -1;  // Default invalid tenant ID
-        String getTenantIdSQL = "SELECT tenant_id FROM tenants WHERE tenant_name = ?";
-        
+        // Retrieve tenant_id for "Test User"
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-             PreparedStatement getTenantStmt = conn.prepareStatement(getTenantIdSQL)) {
-            getTenantStmt.setString(1, "Test User");  // 'Test User' is the name of the user created
-            ResultSet tenantRs = getTenantStmt.executeQuery();
-            
-            // Retrieve tenantId for 'Test User'
-            if (tenantRs.next()) {
-                tenantId = tenantRs.getInt("tenant_id");
-            } else {
-                fail("Test user not found in the tenants table.");
+             Statement stmt = conn.createStatement()) {
+            String sql = "SELECT tenant_id FROM tenants WHERE tenant_name = 'Test User'";
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                tenantId = rs.getInt("tenant_id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            fail("An error occurred while retrieving tenant_id.");
+            fail("Error while setting up Test User.");
         }
     }
 
     @Test
     public void testUserExists() {
-        // Assert that the tenant ID was found and is greater than 0
         assertTrue(tenantId > 0, "Test User should exist in the tenants table.");
     }
 
@@ -56,4 +49,30 @@ public class UsersTest {
                 itemStmt.setInt(2, itemId);
                 ResultSet itemRs = itemStmt.executeQuery();
 
-                // Ass
+                // Assert that each mandatory item is assigned to 'Test User'
+                assertTrue(itemRs.next(), "Item ID " + itemId + " should be assigned to user 'Test'.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                fail("An error occurred while checking the fridge items.");
+            }
+        }
+    }
+
+    @Test
+    public void testGenerateQuantity_Liquid() {
+        int quantity = UserCreation.generateQuantity("Liquid");
+        assertTrue(quantity >= 0 && quantity <= 1000, "Quantity should be between 0 and 1000 for Liquid");
+    }
+
+    @Test
+    public void testGenerateQuantity_Solid() {
+        int quantity = UserCreation.generateQuantity("Solid");
+        assertTrue(quantity >= 0 && quantity <= 1000, "Quantity should be between 0 and 1000 for Solid");
+    }
+
+    @Test
+    public void testGenerateQuantity_Unit() {
+        int quantity = UserCreation.generateQuantity("Unit");
+        assertTrue(quantity >= 0 && quantity <= 12, "Quantity should be between 0 and 12 for Unit");
+    }
+}
