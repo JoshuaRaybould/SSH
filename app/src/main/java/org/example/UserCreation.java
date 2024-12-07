@@ -8,6 +8,7 @@ public class UserCreation {
     static String url = "jdbc:postgresql://localhost:5432/postgres";
     static String username = "postgres";
     static String password = "example";
+    public static Object createUser;
         
     public static void createUser(String userName) {
         try (Connection conn = DriverManager.getConnection(url, username, password)) {
