@@ -9,10 +9,10 @@ public class UserCreation {
     static String username = "postgres";
     static String password = "example";
     public static Object createUser;
-        
+
     public static void createUser(String userName) {
         try (Connection conn = DriverManager.getConnection(url, username, password)) {
-    
+
             // Insert the new user and retrieve the generated tenant_id
             String insertUserSQL = "INSERT INTO tenants (tenant_name) VALUES (?) RETURNING tenant_id";
             int tenantId;
@@ -26,23 +26,23 @@ public class UserCreation {
                     }
                 }
             }
-    
+
             // Assign mandatory items to the user
             int[] mandatoryItemIds = {1001, 1002, 1006, 1046, 1047, 1048, 1045, 1044};
             for (int itemId : mandatoryItemIds) {
                 assignMandatoryItemToUser(conn, tenantId, itemId);
             }
-    
+
             // Assign random fridge items to the user
             String selectItemsSQL = "SELECT fridge_item_id, food_type FROM fridge_items";
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(selectItemsSQL)) {
-    
+
                 Random rand = new Random();
                 while (rs.next()) {
                     int fridgeItemId = rs.getInt("fridge_item_id");
                     String type = rs.getString("food_type");
-    
+
                     // Adjusted to handle case insensitivity for food types
                     int quantity = switch (type.toLowerCase()) {  // Convert to lowercase
                         case "liquid" -> rand.nextInt(1001);  // 0 to 1000 ml
@@ -50,11 +50,11 @@ public class UserCreation {
                         case "unit" -> rand.nextInt(13);      // 0 to 12 units
                         default -> 0;
                     };
-    
+
                     assignItemToUser(conn, tenantId, fridgeItemId, quantity, 0);
                 }
             }
-    
+
             System.out.println("User created successfully with tenant ID: " + tenantId);
         } catch (SQLException e) {
             System.err.println("Error while creating user: " + e.getMessage());
@@ -108,12 +108,14 @@ public class UserCreation {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        createUser("Test User");
+
         // Prompt for a new user
         System.out.print("Enter the name of the user to create: ");
         String userName = scanner.nextLine();
         createUser(userName);
         System.out.println("User created successfully!");
-        
+
         scanner.close();
     }
 }
