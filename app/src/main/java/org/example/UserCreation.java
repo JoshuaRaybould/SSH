@@ -61,7 +61,7 @@ public class UserCreation {
     }
     
     // Helper method to generate random quantities based on item type
-    private static int generateQuantity(String type) {
+    public static int generateQuantity(String type) {
         Random rand = new Random();
         if (type.equals("Liquid")) {
             return rand.nextInt(1001);  // 0 to 1000 ml
