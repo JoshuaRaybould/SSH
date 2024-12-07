@@ -29,11 +29,11 @@ public class UserCreation {
             // Assign mandatory items to the user
             int[] mandatoryItemIds = {1001, 1002, 1006, 1046, 1047, 1048, 1045, 1044};
             for (int itemId : mandatoryItemIds) {
-                assignItemToUser(conn, tenantId, itemId, generateQuantity("Unit"), 0);
+                assignMandatoryItemToUser(conn, tenantId, itemId);
             }
     
             // Assign random fridge items to the user
-            String selectItemsSQL = "SELECT fridge_item_id, type FROM fridge_items";
+            String selectItemsSQL = "SELECT fridge_item_id, food_type FROM fridge_items";
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(selectItemsSQL)) {
     
@@ -42,10 +42,11 @@ public class UserCreation {
                     int fridgeItemId = rs.getInt("fridge_item_id");
                     String type = rs.getString("food_type");
     
-                    int quantity = switch (type) {
-                        case "Liquid" -> rand.nextInt(1001); // 0 to 1000 ml
-                        case "Solid" -> rand.nextInt(1001);  // 0 to 1000 g
-                        case "Unit" -> rand.nextInt(13);     // 0 to 12 units
+                    // Adjusted to handle case insensitivity for food types
+                    int quantity = switch (type.toLowerCase()) {  // Convert to lowercase
+                        case "liquid" -> rand.nextInt(1001);  // 0 to 1000 ml
+                        case "solid" -> rand.nextInt(1001);   // 0 to 1000 g
+                        case "unit" -> rand.nextInt(13);      // 0 to 12 units
                         default -> 0;
                     };
     
@@ -59,15 +60,32 @@ public class UserCreation {
             e.printStackTrace();
         }
     }
-    
+
+    // Helper method to assign a mandatory item to a user, based on its food_type
+    private static void assignMandatoryItemToUser(Connection conn, int tenantId, int itemId) throws SQLException {
+        String selectItemSQL = "SELECT food_type FROM fridge_items WHERE fridge_item_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(selectItemSQL)) {
+            pstmt.setInt(1, itemId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String foodType = rs.getString("food_type");
+                    int quantity = generateQuantity(foodType);
+                    assignItemToUser(conn, tenantId, itemId, quantity, 0);
+                } else {
+                    System.err.println("Item ID " + itemId + " not found in fridge_items.");
+                }
+            }
+        }
+    }
+
     // Helper method to generate random quantities based on item type
     public static int generateQuantity(String type) {
         Random rand = new Random();
-        if (type.equals("Liquid")) {
+        if (type.equalsIgnoreCase("Liquid")) {
             return rand.nextInt(1001);  // 0 to 1000 ml
-        } else if (type.equals("Solid")) {
+        } else if (type.equalsIgnoreCase("Solid")) {
             return rand.nextInt(1001);  // 0 to 1000 g
-        } else if (type.equals("Unit")) {
+        } else if (type.equalsIgnoreCase("Unit")) {
             return rand.nextInt(13);   // 0 to 12 units
         }
         return 0;
