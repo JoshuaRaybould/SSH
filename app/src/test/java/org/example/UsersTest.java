@@ -12,21 +12,17 @@ public class UsersTest {
 
     @Test
     public void testCreateUser_Arman() {
-        // Step 1: Create the user 'Arman'
         UserCreation.createUser("Arman");
 
-        // Step 2: Verify if the user 'Arman' was created in the tenants table
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
             String checkUserSQL = "SELECT tenant_id FROM tenants WHERE tenant_name = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(checkUserSQL)) {
                 pstmt.setString(1, "Arman");
                 ResultSet rs = pstmt.executeQuery();
 
-                // Step 3: Assert that the user exists
                 assertTrue(rs.next(), "User 'Arman' should exist in the tenants table.");
                 int tenantId = rs.getInt("tenant_id");
 
-                // Step 4: Verify if the mandatory items were assigned to 'Arman' in tenants_fridge_items table
                 int[] mandatoryItemIds = {1001, 1002, 1006, 1046, 1047, 1048, 1045, 1044};
                 for (int itemId : mandatoryItemIds) {
                     String checkItemSQL = "SELECT * FROM tenants_fridge_items WHERE tenant_id = ? AND fridge_item_id = ?";
@@ -35,7 +31,6 @@ public class UsersTest {
                         itemStmt.setInt(2, itemId);
                         ResultSet itemRs = itemStmt.executeQuery();
 
-                        // Step 5: Assert that each mandatory item is assigned to 'Arman'
                         assertTrue(itemRs.next(), "Item ID " + itemId + " should be assigned to user 'Arman'.");
                     }
                 }
