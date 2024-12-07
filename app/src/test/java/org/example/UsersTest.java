@@ -14,29 +14,31 @@ public class UsersTest {
 
     @BeforeEach
     public void setUp() {
-        // Fetch the tenant ID for 'Test User' to be used in subsequent tests
-        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
-            String checkUserSQL = "SELECT tenant_id FROM tenants WHERE tenant_name = ?";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(checkUserSQL)) {
-                pstmt.setString(1, "Test User");
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    tenantId = rs.getInt("tenant_id");
-                } else {
-                    fail("Test User does not exist in the tenants table.");
-                }
+        // Retrieve the tenant_id for 'Test User' from the database
+        tenantId = -1;  // Default invalid tenant ID
+        String getTenantIdSQL = "SELECT tenant_id FROM tenants WHERE tenant_name = ?";
+        
+        try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+             PreparedStatement getTenantStmt = conn.prepareStatement(getTenantIdSQL)) {
+            getTenantStmt.setString(1, "Test User");  // 'Test User' is the name of the user created
+            ResultSet tenantRs = getTenantStmt.executeQuery();
+            
+            // Retrieve tenantId for 'Test User'
+            if (tenantRs.next()) {
+                tenantId = tenantRs.getInt("tenant_id");
+            } else {
+                fail("Test user not found in the tenants table.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            fail("An error occurred while fetching the tenant ID.");
+            fail("An error occurred while retrieving tenant_id.");
         }
     }
 
     @Test
-    public void testUserTestUserExists() {
-        // Verify if 'Test User' exists in the tenants table
-        assertTrue(tenantId > 0, "User 'Test User' should exist in the tenants table.");
+    public void testUserExists() {
+        // Assert that the tenant ID was found and is greater than 0
+        assertTrue(tenantId > 0, "Test User should exist in the tenants table.");
     }
 
     @Test
@@ -52,7 +54,7 @@ public class UsersTest {
                 ResultSet itemRs = itemStmt.executeQuery();
 
                 // Assert that each mandatory item is assigned to 'Test User'
-                assertTrue(itemRs.next(), "Item ID " + itemId + " should be assigned to user 'Test User'.");
+                assertTrue(itemRs.next(), "Item ID " + itemId + " should be assigned to user 'Test'.");
             } catch (SQLException e) {
                 e.printStackTrace();
                 fail("An error occurred while checking the fridge items.");
