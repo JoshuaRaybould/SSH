@@ -1,33 +1,25 @@
 package org.example;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MemoryIngredients implements IIngredientsOutput{
-    private String tenantString = "";
-    private List<String> ingedientStrings;
+    private String tenantName = "";
+    private List<Ingredient> ingredients;
 
     @Override
     public void reportIngredients(int tenantId) {
-        TenantIngredients tenant1 = new TenantIngredients(tenantId);
-        if (!tenant1.getTenantName().equals("")) {
-            tenantString = "Tenant with id " + tenantId + ", " + tenant1.getTenantName() + ", has the following ingedients";
-            for (Ingredient ing: tenant1.getIngredients()) {
-                ingedientStrings.add("Name:" + ing.getName() + ", Quantity:" + ing.getQuantity() + ", Quality:" + ing.getQuality());
-            }
-        }
+        Tenant tenant = new Tenant(tenantId);
+        tenantName = tenant.getTenantName();
+        TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
+        ingredients = tenantIngredients.getIngredients();
     }
 
-    public MemoryIngredients() {
-        ingedientStrings = new ArrayList<>();
+    public String getTenantName(){
+        return tenantName;
     }
 
-    public String getTenantString(){
-        return tenantString;
-    }
-
-    public List<String> getIngredientStrings() {
-        return ingedientStrings;
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
     
 }

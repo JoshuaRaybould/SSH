@@ -34,6 +34,12 @@ jobs:
         
       - name: "Tests"
         run: ./gradlew test
+
+      - name: "Setup for integration tests"
+        run: ./gradlew installDist
+
+      - name: "Integration test" # some of the above tests may class as integration tests but this certainly should be
+        run: python3 ./integrationTests/ingredientsTests.py
         
       - name: "Test coverage"
         run: ./gradlew jacocoTestCoverageVerification
@@ -47,7 +53,7 @@ jobs:
           coverage_report_title: JaCoCo
           github_token: ${{ secrets.GITHUB_TOKEN }}
           skip_check_run: false
-          publish_only_summary: false
+          publish_only_summary: true
 
       # Publish Coverage Job Summary
       - name: Add Jacocoo report to workflow run summary
