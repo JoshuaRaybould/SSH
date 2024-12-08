@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Random;
-import java.util.Scanner;
 
 public class UserCreation {
     static String url = "jdbc:postgresql://localhost:5432/postgres";
@@ -30,20 +30,23 @@ public class UserCreation {
                 }
             }
 
-            // Assign mandatory items to the user
+            //Assign mandatory items to the user
             int[] mandatoryItemIds = {1001, 1002, 1006, 1046, 1047, 1048, 1045, 1044};
             for (int itemId : mandatoryItemIds) {
-                assignMandatoryItemToUser(conn, tenantId, itemId);
+                int shelfLife = getShelfLife(conn, itemId); // Query shelf life for each mandatory item
+                assignMandatoryItemToUser(conn, tenantId, itemId, shelfLife, new Random());
             }
 
             // Assign random fridge items to the user
-            String selectItemsSQL = "SELECT fridge_item_id, food_type FROM fridge_items";
+            String selectItemsSQL = "SELECT fridge_item_id, food_type, estimated_shelf_life FROM fridge_items";
             try (Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(selectItemsSQL)) {
 
                 Random rand = new Random();
                 while (rs.next()) {
+                    String foodType = rs.getString("food_type");
                     int fridgeItemId = rs.getInt("fridge_item_id");
+                    int shelfLife = rs.getInt("estimated_shelf_life");
                     Boolean isMandatory = false;
 
                     for(int mandatoryItemId : mandatoryItemIds) {
@@ -54,19 +57,27 @@ public class UserCreation {
 
                     if(rand.nextInt(100) <= 70 && !isMandatory){
 
-                        String type = rs.getString("food_type");
+                        // Calculate captured date with 30% variation
+                        int maxDeviation = (int) (0.3 * shelfLife);
+                        int deviation = rand.nextInt(maxDeviation * 2 + 1) - maxDeviation;
+                        LocalDate capturedDate = LocalDate.now().plusDays(deviation);
 
-
+                        // Use the Ingredient class to calculate quality
+                        Ingredient ingredient = new Ingredient();
+                        ingredient.setCapturedDate(capturedDate);
+                        ingredient.setEstimatedShelfLife(shelfLife);
+                        double quality = ingredient.calculateQuality();
 
                         // Adjusted to handle case insensitivity for food types
-                        int quantity = switch (type.toLowerCase()) {  // Convert to lowercase
+                        int quantity = switch (foodType.toLowerCase()) {  // Convert to lowercase
                             case "liquid" -> rand.nextInt(1001);  // 0 to 1000 ml
                             case "solid" -> rand.nextInt(1001);   // 0 to 1000 g
                             case "unit" -> rand.nextInt(13);      // 0 to 12 units
                             default -> 0;
                         };
+
                         System.out.println("This is an error lol");
-                        assignItemToUser(conn, tenantId, fridgeItemId, quantity, 0);
+                        assignItemToUser(conn, tenantId, fridgeItemId, quantity, quality, capturedDate);
                     }
                 }
             }
@@ -78,8 +89,22 @@ public class UserCreation {
         }
     }
 
+    private static int getShelfLife(Connection conn, int itemId) throws SQLException {
+        String selectShelfLifeSQL = "SELECT estimated_shelf_life FROM fridge_items WHERE fridge_item_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(selectShelfLifeSQL)) {
+            pstmt.setInt(1, itemId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("estimated_shelf_life");
+                } else {
+                    throw new SQLException("Shelf life not found for item ID: " + itemId);
+                }
+            }
+        }
+    }
+
     // Helper method to assign a mandatory item to a user, based on its food_type
-    private static void assignMandatoryItemToUser(Connection conn, int tenantId, int itemId) throws SQLException {
+    private static void assignMandatoryItemToUser(Connection conn, int tenantId, int itemId, int shelfLife, Random rand) throws SQLException {
         String selectItemSQL = "SELECT food_type FROM fridge_items WHERE fridge_item_id = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(selectItemSQL)) {
             pstmt.setInt(1, itemId);
@@ -87,7 +112,13 @@ public class UserCreation {
                 if (rs.next()) {
                     String foodType = rs.getString("food_type");
                     int quantity = generateQuantity(foodType);
-                    assignItemToUser(conn, tenantId, itemId, quantity, 0);
+
+                    // Calculate captured date with 30% variation
+                    int maxDeviation = (int) (0.3 * shelfLife);
+                    int deviation = rand.nextInt(maxDeviation * 2 + 1) - maxDeviation;
+                    LocalDate capturedDate = LocalDate.now().plusDays(deviation);
+
+                    assignItemToUser(conn, tenantId, itemId, quantity, 100.0, capturedDate);
                 } else {
                     System.err.println("Item ID " + itemId + " not found in fridge_items.");
                 }
@@ -109,7 +140,7 @@ public class UserCreation {
     }
 
     // Helper method to assign an item to a user
-    private static void assignItemToUser(Connection conn, int tenantId, int fridgeItemId, int quantity, double quality) throws SQLException {
+    private static void assignItemToUser(Connection conn, int tenantId, int fridgeItemId, int quantity, double quality, LocalDate capturedDate) throws SQLException {
         String insertFridgeItemSQL = "INSERT INTO tenants_fridge_items (tenant_id, fridge_item_id, quantity, date_time, quality) " +
                                      "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(insertFridgeItemSQL)) {
