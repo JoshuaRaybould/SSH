@@ -9,6 +9,7 @@ CREATE TABLE fridge_items (
     fridge_item_name varchar(255) NOT NULL,
     fridge_item_price money NOT NULL,
     estimated_shelf_life integer NOT NULL,
+    food_type varchar(255) NOT NULL,
     PRIMARY KEY(fridge_item_id)
 );
 

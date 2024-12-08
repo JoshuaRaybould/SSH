@@ -29,6 +29,9 @@ public class App {
                 if (command.equals("e")) { // exit the program
                     System.exit(0);
                 }
+                if (command.equals("c")) {
+                    UserCreation.Create();
+                }
 
                 String[] commandParts = command.split(" ");
                 if (commandParts.length != 2) {
