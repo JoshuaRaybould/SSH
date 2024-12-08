@@ -1,0 +1,125 @@
+{
+    "recipes": [
+        {
+            "name": "Lemon Chicken",
+            "instructions": "Marinate chicken with lemon juice, minced garlic, olive oil and pepper. Bake or pan-fry until it's golden and cooked through.",
+            "ingredients": ["Chicken","Lemons","Garlic","Oil","Black Pepper"],
+            "quantity": [1,5,3,10,10]
+        },
+        {
+            "name": "Tomato and Basil Pasta",
+            "instructions": "Cook pasta until al dente. Fry off garlic in olive oil and then add tomato puree and pepper. Mix the pasta with the sauce and stir.",
+            "ingredients": ["Pasta","Garlic","Oil","Tomato Puree","Black Pepper"],
+            "quantity": [500,3,10,7,7]
+        },
+        {
+            "name": "Veg Stir Fry",
+            "instructions": "Heat oil in a pan or a wok. Add and stir fry the chopped vegetables until nice and tender. Add soy sauce and any other condiments that you wish to add and serve.",
+            "ingredients": ["Salad","Broccoli","Oil","Carrots","Bell Peppers", "Soy Sauce"],
+            "quantity": [50,30,7,10,7,6]
+        },
+        {
+            "name": "Avocado Salad",
+            "instructions": "Slice avocado and mix with salad leaves. Drizzle lemon juice and add salt and pepper and mix well.",
+            "ingredients": ["Avocado", "Salad Leaves", "Lemons", "Salt", "Black Pepper"],
+            "quantity": [2, 30, 2, 5, 10]
+        },
+        {
+            "name": "Honey-Glazed Salmon",
+            "instructions": "Mix honey, soy sauce and minced garlic into a glaze. Brush salmon with glaze and bake until cooked. Serve with any side you prefer.",
+            "ingredients": ["Salmon", "Honey", "Soy Sauce", "Garlic"],
+            "quantity": [1, 5, 3, 2]
+        },
+        {
+            "name": "Banana Pancakes",
+            "instructions": "Mash bananas with eggs, flour and baking powder. Fry batter in pan until golden on both sides.",
+            "ingredients": ["Bananas", "Eggs", "Flour", "Baking Powder"],
+            "quantity": [2, 2, 200, 5]
+        },
+        {
+            "name": "Chicken and Rice Bowl",
+            "instructions": "Cook rice and set to aside. Dice chicken. Stir fry chicken and bell peppers in oil with soy sauce. Serve over rice with garnishes of your choice.",
+            "ingredients": ["Chicken", "Rice", "Bell Peppers", "Oil", "Soy Sauce"],
+            "quantity": [1, 300, 2, 10, 5]
+        },
+        {
+            "name": "Bacon and Cheese Omelette",
+            "instructions": "Cook bacon until crispy and chop it up. Whisk eggs, salt and pepper and pour into batter. Put the chopped bacon and cheese and roll omelette over and wait until cooked.",
+            "ingredients": ["Bacon", "Eggs", "Cheese", "Salt", "Black Pepper"],
+            "quantity": [3, 2, 50, 2, 5]
+        },
+        {
+            "name": "Broccoli and Cheese Soup",
+            "instructions": "Sauté broccoli in butter then blend with milk until it's smooth. Stir in grated cheese. Season with pepper and simmer.",
+            "ingredients": ["Broccoli", "Butter", "Milk", "Cheese", "Black Pepper"],
+            "quantity": [2, 50, 500, 100, 5]
+        },
+        {
+            "name": "Spaghetti Carbonara",
+            "instructions": "Cook bacon until crispy. Toss spaghetti with whisked eggs, cheese and the cooked bacon. Cook on low heat and then put pepper and serve.",
+            "ingredients": ["Spaghetti", "Bacon", "Eggs", "Cheese", "Black Pepper"],
+            "quantity": [300, 3, 2, 50, 5]
+        },
+        {
+            "name": "Beef Mince Stir Fry",
+            "instructions": "Cook beef mince until brown and crispy. Add chopped onions, bell peppers and soy sauce. Mix together and sprinkle with paprika. Serve.",
+            "ingredients": ["Beef Mince", "Onions", "Bell Peppers", "Soy Sauce", "Paprika"],
+            "quantity": [400, 2, 2, 5, 2]
+        },
+        {
+            "name": "Hummus and Veggie Wrap",
+            "instructions": "Spread hummus on bread. Add sliced cucumber, bell peppers and salad leaves. Roll up and serve.",
+            "ingredients": ["Hummus", "Bread", "Cucumber", "Bell Peppers", "Salad Leaves"],
+            "quantity": [100, 2, 1, 1, 20]
+        },
+        {
+            "name": "Butter Chicken Curry",
+            "instructions": "Cook chicken in butter and minced garlic. Add tomato puree, paprika and simmer. Serve with rice or naan.",
+            "ingredients": ["Chicken", "Butter", "Garlic", "Tomato Puree", "Paprika"],
+            "quantity": [300, 50, 3, 100, 5]
+        },
+        {
+            "name": "Sausage and Onion Gravy",
+            "instructions": "Cook or air-fry sausage and set aside. Sauté onions in butter, then stir in flour and stock to make gravy. Add sausages and simmer briefly. Can serve with mashed potatoes.",
+            "ingredients": ["Sausages", "Onions", "Butter", "Flour", "Stock"],
+            "quantity": [4, 2, 20, 10, 200]
+        },
+        {
+            "name": "Chicken and Broccoli Stir Fry",
+            "instructions": "Heat oil in pan/wok and fry off garlic. Season chicken before with paprika, lemon juice, pepper and salt. Fry off chicken and broccoli until tender. Stir in with soy sauce and serve.",
+            "ingredients": ["Chicken", "Broccoli", "Oil", "Garlic", "Soy Sauce", "Paprika", "Lemons", "Black Pepper", "Salt"],
+            "quantity": [2, 2, 10, 3, 5, 3 ,1, 3, 2]
+        },
+        {
+            "name": "Beef Mince Tacos",
+            "instructions": "Cook beef mince with diced onions, tomatoes and paprika. Serve in taco shells with lettuce.",
+            "ingredients": ["Beef Mince", "Onions", "Tomatoes", "Paprika", "Taco Shells", "Lettuce"],
+            "quantity": [400, 2, 2, 2, 4, 20]
+        },
+        {
+            "name": "Tuna Melt",
+            "instructions": "Mix tuna with mayonnaise, pepper, salt, lemon juice and sweetcorn in a bowl. Use this mix as filler for a sandwich. Make sure to add cheese on top of the tuna filler. Toast on both sides and serve.",
+            "ingredients": ["Tuna", "Mayonnaise","Black Pepper","Lemons","Salt", "Cheese", "Bread", "Sweetcorn"],
+            "quantity": [200, 50,5,1,3,50, 2, 50]
+        },
+        {
+            "name": "Chicken Caesar Salad",
+            "instructions": "Cook chicken and slice thinly. Toss with salad leaves, mayonnaise, grated cheese and garlic croutons.",
+            "ingredients": ["Chicken", "Salad Leaves", "Mayonnaise", "Cheese", "Croutons"],
+            "quantity": [1, 50, 30, 50, 20]
+        },
+        {
+            "name": "Garlic Butter Prawns with Rice",
+            "instructions": "Melt butter in pan and fry off garlic. Add, prawns and cook until pink. Squeeze lemon juice and serve with rice.",
+            "ingredients": ["Prawns", "Butter", "Garlic", "Lemons", "Rice"],
+            "quantity": [150, 50, 5, 1, 200]
+        },
+        {
+            "name": "Bacon and Mushroom Risotto",
+            "instructions": "Cook bacon and mushrooms and set aside. Cook rice in butter and water, stir in bacon, mushrooms and cheese.",
+            "ingredients": ["Bacon", "Mushrooms", "Rice", "Butter", "Cheese"],
+            "quantity": [5, 5, 200, 30, 50]
+        }
+
+    ]
+}
