@@ -37,14 +37,14 @@ fridge_item_id,fridge_item_name,fridge_item_price,estimated_shelf_life,food_type
 1036,Sausages,2.5,7,unit
 1037,Salmon,5.5,2,unit
 1038,Avacado,2.2,7,solid
-1039,Honey,2.2,1000000000,solid
+1039,Honey,2.2,1000,solid
 1040,Jam,1.5,730,solid
 1041,Flour,1.2,240,solid
-1042,Sugar,1,1000000000,solid
-1043,Rice,2.5,1000000000,solid
+1042,Sugar,1,1000,solid
+1043,Rice,2.5,10000,solid
 1044,Bread,1,7,unit
 1045,Oil,4,365,liquid
-1046,Salt,0.6,1000000000,solid
+1046,Salt,0.6,10000,solid
 1047,Black Pepper,2,1095,solid
 1048,Paprika,1.5,1095,solid
 1049,Baking Powder,1.2,365,solid
