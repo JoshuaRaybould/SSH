@@ -1,5 +1,8 @@
 package org.example;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.Random;
 import java.util.Scanner;
@@ -41,21 +44,34 @@ public class UserCreation {
                 Random rand = new Random();
                 while (rs.next()) {
                     int fridgeItemId = rs.getInt("fridge_item_id");
-                    String type = rs.getString("food_type");
+                    Boolean isMandatory = false;
 
-                    // Adjusted to handle case insensitivity for food types
-                    int quantity = switch (type.toLowerCase()) {  // Convert to lowercase
-                        case "liquid" -> rand.nextInt(1001);  // 0 to 1000 ml
-                        case "solid" -> rand.nextInt(1001);   // 0 to 1000 g
-                        case "unit" -> rand.nextInt(13);      // 0 to 12 units
-                        default -> 0;
-                    };
+                    for(int mandatoryItemId : mandatoryItemIds) {
+                        if(fridgeItemId == mandatoryItemId){
+                            isMandatory = true; 
+                        }
+                    }
 
-                    assignItemToUser(conn, tenantId, fridgeItemId, quantity, 0);
+                    if(rand.nextInt(100) <= 70 && !isMandatory){
+
+                        String type = rs.getString("food_type");
+
+
+
+                        // Adjusted to handle case insensitivity for food types
+                        int quantity = switch (type.toLowerCase()) {  // Convert to lowercase
+                            case "liquid" -> rand.nextInt(1001);  // 0 to 1000 ml
+                            case "solid" -> rand.nextInt(1001);   // 0 to 1000 g
+                            case "unit" -> rand.nextInt(13);      // 0 to 12 units
+                            default -> 0;
+                        };
+                        System.out.println("This is an error lol");
+                        assignItemToUser(conn, tenantId, fridgeItemId, quantity, 0);
+                    }
                 }
             }
 
-            System.out.println("User created successfully with tenant ID: " + tenantId);
+            System.out.println("Items added successfully to tenant ID: " + tenantId);
         } catch (SQLException e) {
             System.err.println("Error while creating user: " + e.getMessage());
             e.printStackTrace();
@@ -105,17 +121,20 @@ public class UserCreation {
         }
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        createUser("Test User");
+    public static void Create() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         // Prompt for a new user
         System.out.print("Enter the name of the user to create: ");
-        String userName = scanner.nextLine();
-        createUser(userName);
+        String userName;
+        try {
+            userName = reader.readLine();
+            createUser(userName);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } // Try to read the command given in        
         System.out.println("User created successfully!");
 
-        scanner.close();
     }
 }
