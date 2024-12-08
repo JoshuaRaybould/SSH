@@ -60,4 +60,12 @@ public class Ingredient {
     public double getQuality() {
         return quality;
     }
+
+    public LocalDate setCapturedDate(LocalDate capturedDate2) {
+        return capturedDate;
+    }
+
+    public void setEstimatedShelfLife(int estimatedShelfLife) {
+        this.estimatedShelfLife = estimatedShelfLife;
+    }
 }
