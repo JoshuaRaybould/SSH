@@ -1,7 +1,7 @@
 import subprocess
 
 output = subprocess.run(
-    ["./app/build/install/app/bin/app", "-i=true", "-t=1"],
+    ["./app/build/install/app/bin/app", "-i=true", "-t=10"],
     stdout=subprocess.PIPE,
     text=True,
 ).stdout
