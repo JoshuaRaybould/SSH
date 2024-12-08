@@ -14,13 +14,14 @@ public class UsersTest {
 
     private int tenantId;
 
+    @Test
     public void setup() {
-        // Create "Test User" before running tests
-        UserCreation.createUser("Test User");
+        // Create "TestUser" before running tests
+        UserCreation.createUser("TestUser");
 
         try {
             // to sleep 10 seconds
-            Thread.sleep(10000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             // recommended because catching InterruptedException clears interrupt flag
             Thread.currentThread().interrupt();
@@ -28,15 +29,15 @@ public class UsersTest {
             return;
         }
     
-        // Retrieve tenant_id for "Test User"
+        // Retrieve tenant_id for "TestUser"
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
              Statement stmt = conn.createStatement()) {
-            String sql = "SELECT tenant_id FROM tenants WHERE tenant_name = 'Test User'";
+            String sql = "SELECT tenant_id FROM tenants WHERE tenant_name = 'TestUser'";
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 tenantId = rs.getInt("tenant_id");
             } else {
-                fail("Test User not found in the tenants table.");
+                fail("TestUser not found in the tenants table.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +49,7 @@ public class UsersTest {
     public void testUserExists() {
         try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
              Statement stmt = conn.createStatement()) {
-            String sql = "SELECT tenant_id FROM tenants WHERE tenant_name = 'Jamal'";
+            String sql = "SELECT tenant_id FROM tenants WHERE tenant_name = 'TestUser'";
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 tenantId = rs.getInt("tenant_id");
@@ -62,11 +63,11 @@ public class UsersTest {
         assertTrue(tenantId > 0, "Test User should exist in the tenants table.");
     }
 
-    /*@Test
+    @Test
 public void testMandatoryItemsAssigned() {
     try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
              Statement stmt = conn.createStatement()) {
-            String sql = "SELECT tenant_id FROM tenants WHERE tenant_name = 'Jamal'";
+            String sql = "SELECT tenant_id FROM tenants WHERE tenant_name = 'TestUser'";
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 tenantId = rs.getInt("tenant_id");
@@ -88,13 +89,13 @@ public void testMandatoryItemsAssigned() {
             ResultSet itemRs = itemStmt.executeQuery();
 
             // Assert that each mandatory item is assigned to 'Test User'
-            assertTrue(itemRs.next(), "Item ID " + itemId + " should be assigned to user 'Jamal'.");
+            assertTrue(itemRs.next(), "Item ID " + itemId + " should be assigned to user 'TestUser'.");
         } catch (SQLException e) {
             e.printStackTrace();
             fail("An error occurred while checking the fridge items.");
         }
     }
-}*/
+}
 
     @Test
     public void testGenerateQuantity_Liquid() {
