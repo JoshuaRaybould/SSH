@@ -23,13 +23,14 @@ public class Ingredient {
     }
 
     public Ingredient() {
-
     }
 
     public double calculateQuality() {
-        long daysSinceCaptured = ChronoUnit.DAYS.between(capturedDate, LocalDate.now()); // testing in days
-        //long shelfLifeInMinutes = estimatedShelfLife * 1440L; // using days
+        if (capturedDate == null) {
+            throw new IllegalStateException("Captured date is not set for quality calculation.");
+        }
 
+        long daysSinceCaptured = ChronoUnit.DAYS.between(capturedDate, LocalDate.now());
         if (daysSinceCaptured > estimatedShelfLife) {
             return 0.0;
         }
@@ -61,7 +62,11 @@ public class Ingredient {
         return quality;
     }
 
-    public LocalDate setCapturedDate(LocalDate capturedDate2) {
+    public void setCapturedDate(LocalDate capturedDate) {
+        this.capturedDate = capturedDate;
+    }
+
+    public LocalDate getCapturedDate() {
         return capturedDate;
     }
 

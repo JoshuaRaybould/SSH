@@ -60,7 +60,7 @@ public class UserCreation {
                         // Calculate captured date with 30% variation
                         int maxDeviation = (int) (0.3 * shelfLife);
                         int deviation = rand.nextInt(maxDeviation * 2 + 1) - maxDeviation;
-                        LocalDate capturedDate = LocalDate.now().plusDays(deviation);
+                        LocalDate capturedDate = LocalDate.now().minusDays(deviation);
 
                         // Use the Ingredient class to calculate quality
                         Ingredient ingredient = new Ingredient();
