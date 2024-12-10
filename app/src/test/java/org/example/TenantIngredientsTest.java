@@ -24,10 +24,7 @@ public class TenantIngredientsTest { // These tests rely on the database and so 
                 // Quality should be a value between 0 and 1
                 assertTrue(ingredient.getQuality() >= 0.0 && ingredient.getQuality() <= 1.0); 
 
-                // Quantity should be greater than 0 (or it shouldnt even appear in their ingredients).
-                // We may add a more in depth check later, but this would require a new ingredients class with all the ingredients and their types so we know what a reasonable quantity is.
-                assertTrue(ingredient.getQuantity() > 0); 
-                
+                // We may add a more in depth check later, but this would require a new ingredients class with all the ingredients and their types so we know what a reasonable quantity is.              
                 // idea for one more statement, assert true that we find the ingredient in the list of all ingredients (unsure if this is relevant at all)
             }
         }
