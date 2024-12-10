@@ -1,7 +1,6 @@
 package org.example;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -11,7 +10,7 @@ public class RecipeRanking {
         TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
         List<Ingredient> userIngredients = tenantIngredients.getIngredients();
         LoadRecipes recipeLoader = new LoadRecipes();
-        Recipe[] recipes = recipeLoader.ReturnRecipes();
+        ArrayList<Recipe> recipes = recipeLoader.getRecipesfromJSON();
 
         List<RankedRecipe> rankedRecipes = new ArrayList<>();
 
@@ -26,7 +25,13 @@ public class RecipeRanking {
             }
         }
 
-        rankedRecipes.sort(Comparator.comparingDouble(RankedRecipe::getQualityScore).reversed());
+       // rankedRecipes.sort(Comparator.comparingDouble(RankedRecipe::getQualityScore).reversed());  -- replaced this line
+        rankedRecipes.sort((r1, r2) -> {
+            double r1ProportionMatched = (double) r1.getAvailableIngredients().size() / r1.getRecipe().getIngredients().length;
+            double r2ProportionMatched = (double) r2.getAvailableIngredients().size() / r2.getRecipe().getIngredients().length;
+            return Double.compare(r2ProportionMatched, r1ProportionMatched); // descending order
+        });
+        
 
         return rankedRecipes;
     }
@@ -88,7 +93,7 @@ public class RecipeRanking {
     
         // load and rank recipes
         LoadRecipes recipeLoader = new LoadRecipes();
-        Recipe[] recipes = recipeLoader.ReturnRecipes();
+        ArrayList<Recipe> recipes = recipeLoader.getRecipesfromJSON();
         List<RankedRecipe> rankedRecipes = new ArrayList<>();
         List<RankedRecipe> allRecipes = new ArrayList<>();
     
