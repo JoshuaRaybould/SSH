@@ -57,10 +57,8 @@ public class UserCreation {
 
                     if(rand.nextInt(100) <= 70 && !isMandatory){
 
-                        // Calculate captured date with 30% variation
-                        int maxDeviation = (int) (0.3 * shelfLife);
-                        int deviation = rand.nextInt(maxDeviation * 2 + 1) - maxDeviation;
-                        LocalDate capturedDate = LocalDate.now().minusDays(deviation);
+                        // Calculate random captured date between current date and (current date - shelf life - 1)
+                        LocalDate capturedDate = generateCapturedDate(shelfLife, rand);
 
                         // Use the Ingredient class to calculate quality
                         Ingredient ingredient = new Ingredient();
@@ -76,8 +74,8 @@ public class UserCreation {
                             default -> 0;
                         };
 
-                        System.out.println("This is an error lol");
-                        assignItemToUser(conn, tenantId, fridgeItemId, quantity, quality, capturedDate);
+                        // System.out.println("This is an error lol");
+                        assignItemToUser(conn, tenantId, fridgeItemId, quantity, quality, Date.valueOf(capturedDate));
                     }
                 }
             }
@@ -113,17 +111,28 @@ public class UserCreation {
                     String foodType = rs.getString("food_type");
                     int quantity = generateQuantity(foodType);
 
-                    // Calculate captured date with 30% variation
-                    int maxDeviation = (int) (0.3 * shelfLife);
-                    int deviation = rand.nextInt(maxDeviation * 2 + 1) - maxDeviation;
-                    LocalDate capturedDate = LocalDate.now().plusDays(deviation);
+                    // Calculate random captured date between current date and (current date - shelf life - 1)
+                    LocalDate capturedDate = generateCapturedDate(shelfLife, rand);
 
-                    assignItemToUser(conn, tenantId, itemId, quantity, 100.0, capturedDate);
+                    Ingredient ingredient = new Ingredient();
+                    ingredient.setCapturedDate(capturedDate);
+                    ingredient.setEstimatedShelfLife(shelfLife);
+                    double quality = ingredient.calculateQuality();
+
+                    assignItemToUser(conn, tenantId, itemId, quantity, quality, Date.valueOf(capturedDate));
                 } else {
                     System.err.println("Item ID " + itemId + " not found in fridge_items.");
                 }
             }
         }
+    }
+
+    // Calculate random captured date between current date and (current date - shelf life - 1)
+    public static LocalDate generateCapturedDate(int shelfLife, Random rand) {
+        int maxDeviation = shelfLife + 1;
+        int deviation = rand.nextInt(maxDeviation);
+        LocalDate capturedDate = LocalDate.now().minusDays(deviation);
+        return capturedDate;
     }
 
     // Helper method to generate random quantities based on item type
@@ -140,14 +149,16 @@ public class UserCreation {
     }
 
     // Helper method to assign an item to a user
-    private static void assignItemToUser(Connection conn, int tenantId, int fridgeItemId, int quantity, double quality, LocalDate capturedDate) throws SQLException {
+    private static void assignItemToUser(Connection conn, int tenantId, int fridgeItemId, int quantity, double quality, Date capturedDate) throws SQLException {
         String insertFridgeItemSQL = "INSERT INTO tenants_fridge_items (tenant_id, fridge_item_id, quantity, date_time, quality) " +
-                                     "VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?)";
+                                     "VALUES (?, ?, ?, ?, ?)";
+
         try (PreparedStatement pstmt = conn.prepareStatement(insertFridgeItemSQL)) {
             pstmt.setInt(1, tenantId);
             pstmt.setInt(2, fridgeItemId);
             pstmt.setInt(3, quantity);
-            pstmt.setDouble(4, quality);
+            pstmt.setDate(4, capturedDate);
+            pstmt.setDouble(5, quality);
             pstmt.executeUpdate();
         }
     }
