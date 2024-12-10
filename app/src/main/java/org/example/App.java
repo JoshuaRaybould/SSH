@@ -73,8 +73,10 @@ public class App {
     }
 
     public static void printUsage() {
-        System.out.println("Usage:tenantID <command>");
+        System.out.println("Usage:");
+        System.out.println("tenantID <command>");
         System.out.println("Commands: i   gives the ingredients the user has");
         System.out.println("Commands: r   gives the recommended recipes for the user");
+        System.out.println("Or just type, c to create a new user");
     }
 }
