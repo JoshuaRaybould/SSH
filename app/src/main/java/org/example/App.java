@@ -31,6 +31,7 @@ public class App {
                 }
                 if (command.equals("c")) {
                     UserCreation.Create();
+                    continue;
                 }
 
                 String[] commandParts = command.split(" ");
