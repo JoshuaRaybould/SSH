@@ -1,9 +1,8 @@
 package org.example;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.Path;
+import java.io.FileInputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -12,6 +11,7 @@ import org.json.JSONObject;
 
 public class LoadRecipes {
 
+    /*
     Recipe recipe1 = new Recipe("Lemon Chicken", 
                                 "Marinate chicken with lemon juice, minced garlic, olive oil and pepper. Bake or pan-fry until it's golden and cooked through.",
                                 new String[] {"Chicken","Lemons","Garlic","Oil","Black Pepper"},
@@ -27,19 +27,25 @@ public class LoadRecipes {
                                 new String[] {"Salad","Broccoli","Oil","Carrots","Bell Peppers", "Soy Sauce"},
                                 new int[] {50,30,7,10,7,6});
         
-
+ 
     public Recipe[] ReturnRecipes(){
         return new Recipe[] {recipe1, recipe2,recipe3};
     }
+    */
     public ArrayList<Recipe> getRecipesfromJSON(){
 
         ArrayList<Recipe> recipeList = new ArrayList<>();
 
-        try {
+        
+        URL url = getClass().getResource("/recipes.json");
+        File fullfile = new File(url.getPath());
 
-            //reads the entire json recipe file and puts it into string format
-            Path jsonFile = Paths.get("recipes.json");  
-            byte [] file = Files.readAllBytes(jsonFile);
+        //reads the entire json recipe file and puts it into string format
+        byte[] file = new byte[(int) fullfile.length()];
+        try (FileInputStream inputStream = new FileInputStream(fullfile)) {
+                inputStream.read(file);
+            
+
             String jsonRecipeData = new String(file);
             
             //gets each recipe as an object and add it to the json recipe array which is a json array
@@ -66,11 +72,10 @@ public class LoadRecipes {
                 }
                 recipeList.add(new Recipe(recipe_name, recipe_instructions, ingredients, quantity));//creates and adds a new recipe object into recipe list
             }
-            
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+            
         return recipeList;
     }
 

@@ -9,9 +9,9 @@ public class RecipeRanking {
 
     public static List<RankedRecipe> rankRecipes(int tenantId) {
         TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
-        List<Ingredient> userIngredients = tenantIngredients.getIngredients();
+        ArrayList<Ingredient> userIngredients = tenantIngredients.getIngredients();
         LoadRecipes recipeLoader = new LoadRecipes();
-        Recipe[] recipes = recipeLoader.ReturnRecipes();
+        ArrayList<Recipe> recipes = recipeLoader.LoadMatchedRecipes(userIngredients);
 
         List<RankedRecipe> rankedRecipes = new ArrayList<>();
 
@@ -84,11 +84,11 @@ public class RecipeRanking {
     public static void displayRankedRecipes(int tenantId) {
         // get user's ingredients
         TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
-        List<Ingredient> userIngredients = tenantIngredients.getIngredients();
+        ArrayList<Ingredient> userIngredients = tenantIngredients.getIngredients();
     
         // load and rank recipes
         LoadRecipes recipeLoader = new LoadRecipes();
-        Recipe[] recipes = recipeLoader.ReturnRecipes();
+        ArrayList<Recipe> recipes = recipeLoader.LoadMatchedRecipes(userIngredients);
         List<RankedRecipe> rankedRecipes = new ArrayList<>();
         List<RankedRecipe> allRecipes = new ArrayList<>();
     
