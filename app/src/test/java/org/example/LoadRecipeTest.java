@@ -1,6 +1,8 @@
 package org.example;
 
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +12,9 @@ public class LoadRecipeTest {
     public void testDataTypes(){
         LoadRecipes loadRecipes = new LoadRecipes();
 
-        Recipe[] recipes = loadRecipes.ReturnRecipes();
+        ArrayList<Recipe> recipes = loadRecipes.getRecipesfromJSON();
 
-        Recipe recipe1 = recipes[0];
+        Recipe recipe1 = recipes.get(0);
 
         assertTrue(recipe1.getName() instanceof String, "Name should be a String");
         
