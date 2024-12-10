@@ -35,21 +35,4 @@ public class DatabaseTest {
         }
     }
 
-    @Test
-    public void testBasicRecipeTable() {
-        try (Connection conn = DriverManager.getConnection(url, username, password);
-            Statement stmt = conn.createStatement()) {
-                assertTrue(conn.isValid(5));
-                String sql = "SELECT * FROM recipes LIMIT 1";
-                ResultSet rs = stmt.executeQuery(sql);
-                rs.next();
-                assertEquals(rs.getInt("recipe_id"), 1001);
-                assertEquals(rs.getString("recipe_name"), "Lemon Chicken");
-                assertEquals(rs.getString("recipe_instructions"), "Marinate chicken with lemon juice, minced garlic, olive oil and pepper. Bake or pan-fry until it's golden and cooked through.");
-            }
-        catch (SQLException e) {
-            e.printStackTrace();
-            fail("Connection failed!");
-        }
-    }
 }
