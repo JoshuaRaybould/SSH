@@ -33,7 +33,17 @@ public class Recipe {
         return quantities;
     }
 
-
+    public double getThreshold() { //added threshold logic here
+        
+        int numIngredients = ingredients.length;
+        if (numIngredients <= 3) {
+            return 0.5;
+        } else if (numIngredients <= 6) {
+            return 0.6;
+        } else {
+            return 0.7;
+        }
+    }
 
     
 }
