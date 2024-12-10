@@ -58,7 +58,7 @@ public class UserCreation {
                     if(rand.nextInt(100) <= 70 && !isMandatory){
 
                         // Calculate random captured date between current date and (current date - shelf life - 1)
-                        LocalDate capturedDate = getCapturedDate(shelfLife, rand);
+                        LocalDate capturedDate = generateCapturedDate(shelfLife, rand);
 
                         // Use the Ingredient class to calculate quality
                         Ingredient ingredient = new Ingredient();
@@ -112,7 +112,7 @@ public class UserCreation {
                     int quantity = generateQuantity(foodType);
 
                     // Calculate random captured date between current date and (current date - shelf life - 1)
-                    LocalDate capturedDate = getCapturedDate(shelfLife, rand);
+                    LocalDate capturedDate = generateCapturedDate(shelfLife, rand);
 
                     Ingredient ingredient = new Ingredient();
                     ingredient.setCapturedDate(capturedDate);
@@ -128,7 +128,7 @@ public class UserCreation {
     }
 
     // Calculate random captured date between current date and (current date - shelf life - 1)
-    public static LocalDate getCapturedDate(int shelfLife, Random rand) {
+    public static LocalDate generateCapturedDate(int shelfLife, Random rand) {
         int maxDeviation = shelfLife + 1;
         int deviation = rand.nextInt(maxDeviation);
         LocalDate capturedDate = LocalDate.now().minusDays(deviation);
