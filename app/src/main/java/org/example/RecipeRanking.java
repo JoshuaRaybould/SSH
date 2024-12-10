@@ -89,29 +89,26 @@ public class RecipeRanking {
         TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
         List<Ingredient> userIngredients = tenantIngredients.getIngredients();
     
-        // Load and rank recipes
+        // Load recipes
         LoadRecipes recipeLoader = new LoadRecipes();
-        ArrayList<Recipe> recipes = recipeLoader.getRecipesfromJSON();
-        List<RankedRecipe> rankedRecipes = rankRecipes(tenantId); // Use rankRecipes for this logic
+        ArrayList<Recipe> allRecipes = recipeLoader.getRecipesfromJSON();
+    
+        // Convert List<Ingredient> to ArrayList<Ingredient>
+        ArrayList<Ingredient> userIngredientsArrayList = new ArrayList<>(userIngredients);
+    
+        // Find recipes the user can make
+        ArrayList<Recipe> canMakeRecipes = recipeLoader.LoadMatchedRecipes(userIngredientsArrayList);
     
         // Display recipes the user can make
         System.out.println("Recipes the user can make:");
         System.out.println("------------------------------------------------");
         boolean anyCanMakeRecipes = false;
-        for (RankedRecipe rankedRecipe : rankedRecipes) {
-            double proportionMatched = (double) rankedRecipe.getAvailableIngredients().size() / rankedRecipe.getRecipe().getIngredients().length;
-            double threshold = rankedRecipe.getRecipe().getThreshold();
-    
-            if (proportionMatched >= threshold) {
-                anyCanMakeRecipes = true;
-                System.out.println("------------------------------------------------");
-                System.out.println("Recipe: " + rankedRecipe.getRecipe().getName());
-                System.out.println("Quality Score: " + rankedRecipe.getQualityScore());
-                System.out.println("Proportion Matched: " + proportionMatched);
-                System.out.println("Threshold: " + threshold);
-                System.out.println("Available Ingredients: " + String.join(", ", rankedRecipe.getAvailableIngredients()));
-                System.out.println("Missing Ingredients: " + String.join(", ", rankedRecipe.getMissingIngredients()));
-            }
+        for (Recipe recipe : canMakeRecipes) {
+            anyCanMakeRecipes = true;
+            System.out.println("------------------------------------------------");
+            System.out.println("Recipe: " + recipe.getName());
+            System.out.println("Ingredients: " + String.join(", ", recipe.getIngredients()));
+            System.out.println("Threshold: " + recipe.getThreshold());
         }
     
         if (!anyCanMakeRecipes) {
@@ -123,11 +120,11 @@ public class RecipeRanking {
         System.out.println("Missing recipes the user can't make:");
         System.out.println("------------------------------------------------");
         boolean anyMissingRecipes = false;
-        for (Recipe recipe : recipes) {
+        for (Recipe recipe : allRecipes) {
             List<String> availableIngredients = new ArrayList<>();
             List<String> missingIngredients = new ArrayList<>();
     
-            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
+            double qualityScore = calculateRecipeQuality(recipe, userIngredientsArrayList, availableIngredients, missingIngredients);
     
             double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
             double threshold = recipe.getThreshold();
@@ -147,9 +144,13 @@ public class RecipeRanking {
         if (!anyMissingRecipes) {
             System.out.println("No missing recipes the user can't make.");
         }
-        
+    
         System.out.println("------------------------------------------------");
     }
+    
+    
+    
+    
     
     
     
