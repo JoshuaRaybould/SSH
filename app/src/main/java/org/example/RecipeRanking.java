@@ -20,13 +20,16 @@ public class RecipeRanking {
             List<String> missingIngredients = new ArrayList<>();
 
             double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
+            double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
+            double threshold = recipe.getThreshold();
 
-            if (qualityScore > 0) {
-                rankedRecipes.add(new RankedRecipe(recipe, qualityScore, (double) availableIngredients.size() / recipe.getIngredients().length, availableIngredients, missingIngredients));
+            if (proportionMatched >= threshold) {
+                rankedRecipes.add(new RankedRecipe(recipe, qualityScore, proportionMatched, availableIngredients, missingIngredients));
             }
         }
 
         rankedRecipes.sort(Comparator.comparingDouble(RankedRecipe::getQualityScore).reversed());
+        rankedRecipes.sort(Comparator.comparingDouble(RankedRecipe::getProportionMatched).reversed());
 
         return rankedRecipes;
     }
@@ -60,15 +63,7 @@ public class RecipeRanking {
 
         double proportionMatched = (double) matchedCount / totalIngredients;
 
-        // thresholds for different recipe sizes.
-        double threshold = totalIngredients <= 3 ? 0.5 :
-                        totalIngredients <= 6 ? 0.6 : 
-                        0.7;
-
-        if (proportionMatched >= threshold) {
-            return (totalQuality / matchedCount) * proportionMatched; 
-        }
-        return 0;
+        return (totalQuality / matchedCount) * proportionMatched; 
     }
 
 
