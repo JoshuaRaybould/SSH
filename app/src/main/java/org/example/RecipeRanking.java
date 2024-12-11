@@ -1,40 +1,35 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
 public class RecipeRanking {
 
     public static List<RankedRecipe> rankRecipes(int tenantId) {
-        
         TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
-        List<Ingredient> userIngredients = tenantIngredients.getIngredients();
+        ArrayList<Ingredient> userIngredients = tenantIngredients.getIngredients();
         LoadRecipes recipeLoader = new LoadRecipes();
-        ArrayList<Recipe> recipes = recipeLoader.getRecipesfromJSON();
-    
+        ArrayList<Recipe> recipes = recipeLoader.LoadMatchedRecipes(userIngredients);
+
         List<RankedRecipe> rankedRecipes = new ArrayList<>();
-    
+
         for (Recipe recipe : recipes) {
             List<String> availableIngredients = new ArrayList<>();
             List<String> missingIngredients = new ArrayList<>();
-    
+
             double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
-    
-            double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
-            double threshold = recipe.getThreshold();
-    
-            if (proportionMatched >= threshold) {
+
+            if (qualityScore > 0) {
                 rankedRecipes.add(new RankedRecipe(recipe, qualityScore, availableIngredients, missingIngredients));
             }
         }
-    
-        // Sort ranked recipes by quality score
-        rankedRecipes.sort((r1, r2) -> Double.compare(r2.getQualityScore(), r1.getQualityScore()));
-    
+
+        rankedRecipes.sort(Comparator.comparingDouble(RankedRecipe::getQualityScore).reversed());
+
         return rankedRecipes;
     }
-    
 
     private static double calculateRecipeQuality(Recipe recipe, List<Ingredient> userIngredients,
                                              List<String> availableIngredients, List<String> missingIngredients) {
@@ -66,7 +61,9 @@ public class RecipeRanking {
     double proportionMatched = (double) matchedCount / totalIngredients;
 
     // thresholds for different recipe sizes.
-    double threshold = recipe.getThreshold();
+    double threshold = totalIngredients <= 3 ? 0.5 :
+                       totalIngredients <= 6 ? 0.6 : 
+                       0.7;
 
     if (proportionMatched >= threshold) {
         return (totalQuality / matchedCount) * proportionMatched; 
@@ -85,57 +82,86 @@ public class RecipeRanking {
     }
 
     public static void displayRankedRecipes(int tenantId) {
-        
+        // Get user's ingredients
         TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
-        ArrayList<Ingredient> userIngredients = new ArrayList<>(tenantIngredients.getIngredients());
-
+        List<Ingredient> userIngredients = tenantIngredients.getIngredients();
+    
+        // Load recipes
         LoadRecipes recipeLoader = new LoadRecipes();
-    
-        ArrayList<Recipe> matchedRecipes = recipeLoader.LoadMatchedRecipes(userIngredients);
-    
         ArrayList<Recipe> allRecipes = recipeLoader.getRecipesfromJSON();
     
-        ArrayList<Recipe> unmatchedRecipes = new ArrayList<>(allRecipes);
-        unmatchedRecipes.removeAll(matchedRecipes);
+        // Convert List<Ingredient> to ArrayList<Ingredient>
+        ArrayList<Ingredient> userIngredientsArrayList = new ArrayList<>(userIngredients);
     
+        // Display recipes the user can make
         System.out.println("Recipes the user can make:");
         System.out.println("------------------------------------------------");
-        if (matchedRecipes.isEmpty()) {
-            System.out.println("No recipes the user can make.");
-        } else {
-            for (Recipe recipe : matchedRecipes) {
-                List<String> availableIngredients = new ArrayList<>();
-                List<String> missingIngredients = new ArrayList<>();
+        boolean anyCanMakeRecipes = false;
     
-                calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
-                
+        for (Recipe recipe : allRecipes) {
+            // Prepare lists for available and missing ingredients
+            List<String> availableIngredients = new ArrayList<>();
+            List<String> missingIngredients = new ArrayList<>();
+    
+            // Calculate the proportion matched and quality score
+            double qualityScore = calculateRecipeQuality(recipe, userIngredientsArrayList, availableIngredients, missingIngredients);
+            double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
+            double threshold = recipe.getThreshold();
+    
+            // Check if the user can make this recipe (proportion matched >= threshold)
+            if (proportionMatched >= threshold) {
+                anyCanMakeRecipes = true;
+    
+                // Display recipe details
                 System.out.println("------------------------------------------------");
                 System.out.println("Recipe: " + recipe.getName());
                 System.out.println("Ingredients: " + String.join(", ", recipe.getIngredients()));
+                System.out.println("Threshold: " + threshold);
+                System.out.println("Proportion Matched: " + String.format("%.2f", proportionMatched));
+                System.out.println("Quality Score: " + String.format("%.2f", qualityScore));
                 System.out.println("Available Ingredients: " + String.join(", ", availableIngredients));
                 System.out.println("Missing Ingredients: " + String.join(", ", missingIngredients));
             }
+        }
+    
+        if (!anyCanMakeRecipes) {
+            System.out.println("No recipes the user can make.");
         }
     
         // Display recipes the user cannot make
         System.out.println("------------------------------------------------");
         System.out.println("Recipes the user cannot make:");
         System.out.println("------------------------------------------------");
-        if (unmatchedRecipes.isEmpty()) {
-            System.out.println("No recipes the user cannot make.");
-        } else {
-            for (Recipe recipe : unmatchedRecipes) {
-                List<String> availableIngredients = new ArrayList<>();
-                List<String> missingIngredients = new ArrayList<>();
+        boolean anyCannotMakeRecipes = false;
     
-                calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
-                
+        for (Recipe recipe : allRecipes) {
+            // Prepare lists for available and missing ingredients
+            List<String> availableIngredients = new ArrayList<>();
+            List<String> missingIngredients = new ArrayList<>();
+    
+            // Calculate the proportion matched and quality score
+            double qualityScore = calculateRecipeQuality(recipe, userIngredientsArrayList, availableIngredients, missingIngredients);
+            double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
+            double threshold = recipe.getThreshold();
+    
+            // Check if the user cannot make this recipe (proportion matched < threshold)
+            if (proportionMatched < threshold) {
+                anyCannotMakeRecipes = true;
+    
+                // Display recipe details
                 System.out.println("------------------------------------------------");
                 System.out.println("Recipe: " + recipe.getName());
                 System.out.println("Ingredients: " + String.join(", ", recipe.getIngredients()));
+                System.out.println("Threshold: " + threshold);
+                System.out.println("Proportion Matched: " + String.format("%.2f", proportionMatched));
+                System.out.println("Quality Score: " + String.format("%.2f", qualityScore));
                 System.out.println("Available Ingredients: " + String.join(", ", availableIngredients));
                 System.out.println("Missing Ingredients: " + String.join(", ", missingIngredients));
             }
+        }
+    
+        if (!anyCannotMakeRecipes) {
+            System.out.println("No recipes the user cannot make.");
         }
     
         System.out.println("------------------------------------------------");
@@ -143,15 +169,14 @@ public class RecipeRanking {
     
     
     
-        
     
 }
 
 class RankedRecipe {
-    private final Recipe recipe;
-    private final double qualityScore;
-    private final List<String> availableIngredients;
-    private final List<String> missingIngredients;
+    private Recipe recipe;
+    private double qualityScore;
+    private List<String> availableIngredients;
+    private List<String> missingIngredients;
 
     public RankedRecipe(Recipe recipe, double qualityScore, List<String> availableIngredients, List<String> missingIngredients) {
         this.recipe = recipe;
