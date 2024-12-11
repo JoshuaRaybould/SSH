@@ -2,49 +2,56 @@ Recommended recipes:
 ------------------------------------------------
 Recipe: Lemon Chicken
 Ingredients: Chicken, Lemons, Garlic, Oil, Black Pepper
+Required quantities: 1, 5, 3, 10, 10
+Your quantities: 1, 8, 12, 2000, 500
+Recipe instructions: Marinate chicken with lemon juice, minced garlic, olive oil and pepper. Bake or pan-fry until it's golden and cooked through.
 Proportion Matched: 1.00
 Quality Score: 80.00
-Available Ingredients: Chicken, Lemons, Garlic, Oil, Black Pepper
-Missing Ingredients: 
 ------------------------------------------------
 Recipe: Bacon and Cheese Omelette
 Ingredients: Bacon, Eggs, Cheese, Salt, Black Pepper
+Required quantities: 3, 2, 50, 2, 5
+Your quantities: 6, 12, 0, 500, 500
+Recipe instructions: Cook bacon until crispy and chop it up. Whisk eggs, salt and pepper and pour into batter. Put the chopped bacon and cheese and roll omelette over and wait until cooked.
 Proportion Matched: 0.80
 Quality Score: 46.40
-Available Ingredients: Bacon, Eggs, Salt, Black Pepper
-Missing Ingredients: Cheese
 ------------------------------------------------
 Recipe: Tomato and Basil Pasta
 Ingredients: Pasta, Garlic, Oil, Tomato Puree, Black Pepper
+Required quantities: 500, 3, 10, 7, 7
+Your quantities: 0, 12, 2000, 0, 500
+Recipe instructions: Cook pasta until al dente. Fry off garlic in olive oil and then add tomato puree and pepper. Mix the pasta with the sauce and stir.
 Proportion Matched: 0.60
 Quality Score: 48.00
-Available Ingredients: Garlic, Oil, Black Pepper
-Missing Ingredients: Pasta, Tomato Puree
 ------------------------------------------------
 Recipe: Avocado Salad
 Ingredients: Avocado, Salad Leaves, Lemons, Salt, Black Pepper
+Required quantities: 2, 30, 2, 5, 10
+Your quantities: 0, 0, 8, 500, 500
+Recipe instructions: Slice avocado and mix with salad leaves. Drizzle lemon juice and add salt and pepper and mix well.
 Proportion Matched: 0.60
 Quality Score: 43.60
-Available Ingredients: Lemons, Salt, Black Pepper
-Missing Ingredients: Avocado, Salad Leaves
 ------------------------------------------------
 Recipe: Chicken and Rice Bowl
 Ingredients: Chicken, Rice, Bell Peppers, Oil, Soy Sauce
+Required quantities: 1, 300, 2, 10, 5
+Your quantities: 1, 2000, 0, 2000, 0
+Recipe instructions: Cook rice and set to aside. Dice chicken. Stir fry chicken and bell peppers in oil with soy sauce. Serve over rice with garnishes of your choice.
 Proportion Matched: 0.60
 Quality Score: 39.00
-Available Ingredients: Chicken, Rice, Oil
-Missing Ingredients: Bell Peppers, Soy Sauce
 ------------------------------------------------
 Recipe: Garlic Butter Prawns with Rice
 Ingredients: Prawns, Butter, Garlic, Lemons, Rice
+Required quantities: 150, 50, 5, 1, 200
+Your quantities: 0, 0, 12, 8, 2000
+Recipe instructions: Melt butter in pan and fry off garlic. Add, prawns and cook until pink. Squeeze lemon juice and serve with rice.
 Proportion Matched: 0.60
 Quality Score: 39.00
-Available Ingredients: Garlic, Lemons, Rice
-Missing Ingredients: Prawns, Butter
 ------------------------------------------------
 Recipe: Spaghetti Carbonara
 Ingredients: Spaghetti, Bacon, Eggs, Cheese, Black Pepper
+Required quantities: 300, 3, 2, 50, 5
+Your quantities: 0, 6, 12, 0, 500
+Recipe instructions: Cook bacon until crispy. Toss spaghetti with whisked eggs, cheese and the cooked bacon. Cook on low heat and then put pepper and serve.
 Proportion Matched: 0.60
 Quality Score: 34.80
-Available Ingredients: Bacon, Eggs, Black Pepper
-Missing Ingredients: Spaghetti, Cheese
