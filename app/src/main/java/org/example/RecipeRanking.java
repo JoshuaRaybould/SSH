@@ -63,7 +63,11 @@ public class RecipeRanking {
 
         double proportionMatched = (double) matchedCount / totalIngredients;
 
-        return (totalQuality / matchedCount) * proportionMatched; 
+        if (matchedCount > 0) {
+            return (totalQuality / matchedCount) * proportionMatched; 
+        } else {
+            return 0;
+        }
     }
 
 
@@ -78,15 +82,20 @@ public class RecipeRanking {
 
     public static void displayRankedRecipes(int tenantId) {
         List<RankedRecipe> rankedRecipes = rankRecipes(tenantId);
+        System.out.println("Recommended recipes:");
+        if (rankedRecipes.isEmpty()) {
+            System.out.println("Insufficient ingredients to make any recipes");
+        }
+
         for (RankedRecipe rankRecipe : rankedRecipes) {
             Recipe theRecipe = rankRecipe.getRecipe();
             System.out.println("------------------------------------------------");
-                System.out.println("Recipe: " + theRecipe.getName());
-                System.out.println("Ingredients: " + String.join(", ", theRecipe.getIngredients()));
-                System.out.println("Proportion Matched: " + String.format("%.2f", rankRecipe.getProportionMatched()));
-                System.out.println("Quality Score: " + String.format("%.2f", rankRecipe.getQualityScore()));
-                System.out.println("Available Ingredients: " + String.join(", ", rankRecipe.getAvailableIngredients()));
-                System.out.println("Missing Ingredients: " + String.join(", ", rankRecipe.getMissingIngredients()));
+            System.out.println("Recipe: " + theRecipe.getName());
+            System.out.println("Ingredients: " + String.join(", ", theRecipe.getIngredients()));
+            System.out.println("Proportion Matched: " + String.format("%.2f", rankRecipe.getProportionMatched()));
+            System.out.println("Quality Score: " + String.format("%.2f", rankRecipe.getQualityScore()));
+            System.out.println("Available Ingredients: " + String.join(", ", rankRecipe.getAvailableIngredients()));
+            System.out.println("Missing Ingredients: " + String.join(", ", rankRecipe.getMissingIngredients()));
         }
     }
 

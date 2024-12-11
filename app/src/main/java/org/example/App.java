@@ -63,7 +63,9 @@ public class App {
             printTenantIngredients(new StdoutIngredients(), tenantID);
         } else if (command.equals("rankrecipes") || command.equals("r")){ // We want to display recommended recipes
             RecipeRanking.displayRankedRecipes(tenantID);
-        }else{
+        }else if (command.equals("full") || command.equals("fullrecipes") || command.equals("f")){ // We want to get full recipe details (mainly for our own testing sake)
+            RecipeRanking.displayAllRecipesInfo(tenantID);
+        } else {
             printUsage();
         }
     }
@@ -75,8 +77,9 @@ public class App {
     public static void printUsage() {
         System.out.println("Usage:");
         System.out.println("tenantID <command>");
-        System.out.println("Commands: i   gives the ingredients the user has");
-        System.out.println("Commands: r   gives the recommended recipes for the user");
+        System.out.println("Command: i   gives the ingredients the user has");
+        System.out.println("Command: r   gives the recommended recipes for the user");
+        System.out.println("Command: f   gives full recipes details");
         System.out.println("Or just type, c to create a new user");
     }
 }
