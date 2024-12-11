@@ -85,84 +85,57 @@ public class RecipeRanking {
     }
 
     public static void displayRankedRecipes(int tenantId) {
-        // Get user's ingredients
+        
         TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
-        List<Ingredient> userIngredients = tenantIngredients.getIngredients();
-    
-        // Load recipes
+        ArrayList<Ingredient> userIngredients = new ArrayList<>(tenantIngredients.getIngredients());
+
         LoadRecipes recipeLoader = new LoadRecipes();
+    
+        ArrayList<Recipe> matchedRecipes = recipeLoader.LoadMatchedRecipes(userIngredients);
+    
         ArrayList<Recipe> allRecipes = recipeLoader.getRecipesfromJSON();
     
-        // Convert List<Ingredient> to ArrayList<Ingredient>
-        ArrayList<Ingredient> userIngredientsArrayList = new ArrayList<>(userIngredients);
+        ArrayList<Recipe> unmatchedRecipes = new ArrayList<>(allRecipes);
+        unmatchedRecipes.removeAll(matchedRecipes);
     
-        // Display recipes the user can make
         System.out.println("Recipes the user can make:");
         System.out.println("------------------------------------------------");
-        boolean anyCanMakeRecipes = false;
+        if (matchedRecipes.isEmpty()) {
+            System.out.println("No recipes the user can make.");
+        } else {
+            for (Recipe recipe : matchedRecipes) {
+                List<String> availableIngredients = new ArrayList<>();
+                List<String> missingIngredients = new ArrayList<>();
     
-        for (Recipe recipe : allRecipes) {
-            // Prepare lists for available and missing ingredients
-            List<String> availableIngredients = new ArrayList<>();
-            List<String> missingIngredients = new ArrayList<>();
-    
-            // Calculate the proportion matched and quality score
-            double qualityScore = calculateRecipeQuality(recipe, userIngredientsArrayList, availableIngredients, missingIngredients);
-            double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
-            double threshold = recipe.getThreshold();
-    
-            // Check if the user can make this recipe (proportion matched >= threshold)
-            if (proportionMatched >= threshold) {
-                anyCanMakeRecipes = true;
-    
-                // Display recipe details
+                calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
+                
                 System.out.println("------------------------------------------------");
                 System.out.println("Recipe: " + recipe.getName());
                 System.out.println("Ingredients: " + String.join(", ", recipe.getIngredients()));
-                System.out.println("Threshold: " + threshold);
-                System.out.println("Proportion Matched: " + String.format("%.2f", proportionMatched));
                 System.out.println("Available Ingredients: " + String.join(", ", availableIngredients));
                 System.out.println("Missing Ingredients: " + String.join(", ", missingIngredients));
             }
         }
     
-        if (!anyCanMakeRecipes) {
-            System.out.println("No recipes the user can make.");
-        }
-    
-        // Display missing recipes (the user can't make)
+        // Display recipes the user cannot make
         System.out.println("------------------------------------------------");
-        System.out.println("Missing recipes the user can't make:");
+        System.out.println("Recipes the user cannot make:");
         System.out.println("------------------------------------------------");
-        boolean anyMissingRecipes = false;
+        if (unmatchedRecipes.isEmpty()) {
+            System.out.println("No recipes the user cannot make.");
+        } else {
+            for (Recipe recipe : unmatchedRecipes) {
+                List<String> availableIngredients = new ArrayList<>();
+                List<String> missingIngredients = new ArrayList<>();
     
-        for (Recipe recipe : allRecipes) {
-            // Prepare lists for available and missing ingredients
-            List<String> availableIngredients = new ArrayList<>();
-            List<String> missingIngredients = new ArrayList<>();
-    
-            // Calculate the proportion matched and quality score
-            double qualityScore = calculateRecipeQuality(recipe, userIngredientsArrayList, availableIngredients, missingIngredients);
-            double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
-            double threshold = recipe.getThreshold();
-    
-            // Check if the user cannot make this recipe (proportion matched < threshold)
-            if (proportionMatched < threshold) {
-                anyMissingRecipes = true;
-    
-                // Display recipe details
+                calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
+                
                 System.out.println("------------------------------------------------");
                 System.out.println("Recipe: " + recipe.getName());
-                System.out.println("Quality Score: " + qualityScore);
-                System.out.println("Proportion Matched: " + String.format("%.2f", proportionMatched));
-                System.out.println("Threshold: " + threshold);
+                System.out.println("Ingredients: " + String.join(", ", recipe.getIngredients()));
                 System.out.println("Available Ingredients: " + String.join(", ", availableIngredients));
                 System.out.println("Missing Ingredients: " + String.join(", ", missingIngredients));
             }
-        }
-    
-        if (!anyMissingRecipes) {
-            System.out.println("No missing recipes the user can't make.");
         }
     
         System.out.println("------------------------------------------------");
@@ -170,13 +143,7 @@ public class RecipeRanking {
     
     
     
-    
-    
-    
-    
-    
-    
-    
+        
     
 }
 
