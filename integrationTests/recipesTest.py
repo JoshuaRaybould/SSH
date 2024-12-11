@@ -6,7 +6,7 @@ output = subprocess.run(
     text=True,
 ).stdout
 
-with open("./integrationTests/ingredientTest.expected") as f:
+with open("./integrationTests/recipesTest.expected") as f:
     expected = f.read()
 
 if output != expected:
