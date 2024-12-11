@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -38,43 +39,49 @@ public class LoadRecipes {
 
         
         URL url = getClass().getResource("/recipes.json");
-        File fullfile = new File(url.getPath());
+        File fullfile;
+        try {
+            fullfile = new File(url.toURI());
 
-        //reads the entire json recipe file and puts it into string format
-        byte[] file = new byte[(int) fullfile.length()];
-        try (FileInputStream inputStream = new FileInputStream(fullfile)) {
-                inputStream.read(file);
-            
+            //reads the entire json recipe file and puts it into string format
+            byte[] file = new byte[(int) fullfile.length()];
+            try (FileInputStream inputStream = new FileInputStream(fullfile)) {
+                    inputStream.read(file);
+                
 
-            String jsonRecipeData = new String(file);
-            
-            //gets each recipe as an object and add it to the json recipe array which is a json array
-            JSONObject object = new JSONObject(jsonRecipeData);
-            JSONArray jsonRecipeArray = object.getJSONArray("recipes");
+                String jsonRecipeData = new String(file);
+                
+                //gets each recipe as an object and add it to the json recipe array which is a json array
+                JSONObject object = new JSONObject(jsonRecipeData);
+                JSONArray jsonRecipeArray = object.getJSONArray("recipes");
 
-            //goes through each recipe and retrieves the data needed
-            for (int i = 0; i < jsonRecipeArray.length(); i++){
+                //goes through each recipe and retrieves the data needed
+                for (int i = 0; i < jsonRecipeArray.length(); i++){
 
-                JSONObject jsonRecipe = jsonRecipeArray.getJSONObject(i); //gets each recipe
-                String recipe_name = jsonRecipe.getString("name"); //retrieves the actual name of recipe which is next to the 'name' keyword
-                String recipe_instructions = jsonRecipe.getString("instructions");// retrieves actual recipe instructions which is next to the 'instructions' keyword
-                JSONArray recipe_ingredients = jsonRecipe.getJSONArray("ingredients");// retrieves the actual ingredients array stored next to the 'ingredients' keyword and stores in json array
-                JSONArray ingredient_quantities = jsonRecipe.getJSONArray("quantity");//retrieves the actual quantity array stored next to keyword 'quantity' into a json array
+                    JSONObject jsonRecipe = jsonRecipeArray.getJSONObject(i); //gets each recipe
+                    String recipe_name = jsonRecipe.getString("name"); //retrieves the actual name of recipe which is next to the 'name' keyword
+                    String recipe_instructions = jsonRecipe.getString("instructions");// retrieves actual recipe instructions which is next to the 'instructions' keyword
+                    JSONArray recipe_ingredients = jsonRecipe.getJSONArray("ingredients");// retrieves the actual ingredients array stored next to the 'ingredients' keyword and stores in json array
+                    JSONArray ingredient_quantities = jsonRecipe.getJSONArray("quantity");//retrieves the actual quantity array stored next to keyword 'quantity' into a json array
 
-                String [] ingredients = new String[recipe_ingredients.length()];//going to be used to store entries from json array into string array
-                int [] quantity = new int[ingredient_quantities.length()];//going to be used to store entries from json array into int array
+                    String [] ingredients = new String[recipe_ingredients.length()];//going to be used to store entries from json array into string array
+                    int [] quantity = new int[ingredient_quantities.length()];//going to be used to store entries from json array into int array
 
-                for (int x = 0; x < recipe_ingredients.length(); x++){ //because ingredients and quantitys array will have to be same length 
+                    for (int x = 0; x < recipe_ingredients.length(); x++){ //because ingredients and quantitys array will have to be same length 
 
-                    ingredients[x] = recipe_ingredients.getString(x);//adds the ingredients from json array to string array
-                    quantity[x] = ingredient_quantities.getInt(x);//adds quantity from json array to int array
+                        ingredients[x] = recipe_ingredients.getString(x);//adds the ingredients from json array to string array
+                        quantity[x] = ingredient_quantities.getInt(x);//adds quantity from json array to int array
 
+                    }
+                    recipeList.add(new Recipe(recipe_name, recipe_instructions, ingredients, quantity));//creates and adds a new recipe object into recipe list
                 }
-                recipeList.add(new Recipe(recipe_name, recipe_instructions, ingredients, quantity));//creates and adds a new recipe object into recipe list
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
             
         return recipeList;
     }
