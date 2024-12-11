@@ -22,7 +22,7 @@ public class RecipeRanking {
             double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
 
             if (qualityScore > 0) {
-                rankedRecipes.add(new RankedRecipe(recipe, qualityScore, availableIngredients, missingIngredients));
+                rankedRecipes.add(new RankedRecipe(recipe, qualityScore, (double) availableIngredients.size() / recipe.getIngredients().length, availableIngredients, missingIngredients));
             }
         }
 
@@ -33,43 +33,43 @@ public class RecipeRanking {
 
     private static double calculateRecipeQuality(Recipe recipe, List<Ingredient> userIngredients,
                                              List<String> availableIngredients, List<String> missingIngredients) {
-    String[] recipeIngredients = recipe.getIngredients();
-    int[] requiredQuantities = recipe.getQuantities();
+        String[] recipeIngredients = recipe.getIngredients();
+        int[] requiredQuantities = recipe.getQuantities();
 
-    double totalQuality = 0;
-    int matchedCount = 0;
-    int totalIngredients = recipeIngredients.length;
+        double totalQuality = 0;
+        int matchedCount = 0;
+        int totalIngredients = recipeIngredients.length;
 
 
-    for (int i = 0; i < recipeIngredients.length; i++) {
-        String requiredIngredient = recipeIngredients[i];
-        int requiredQuantity = requiredQuantities[i];
+        for (int i = 0; i < recipeIngredients.length; i++) {
+            String requiredIngredient = recipeIngredients[i];
+            int requiredQuantity = requiredQuantities[i];
 
-        Ingredient userIngredient = findUserIngredient(requiredIngredient, userIngredients);
-        if (userIngredient != null && userIngredient.getQuantity() >= requiredQuantity) {
-            availableIngredients.add(requiredIngredient);
-            totalQuality += userIngredient.getQuality();
-            matchedCount++;
-        } else {
-            // add to missingIngredients only if it's not already there
-            if (!missingIngredients.contains(requiredIngredient)) {
-                missingIngredients.add(requiredIngredient);
+            Ingredient userIngredient = findUserIngredient(requiredIngredient, userIngredients);
+            if (userIngredient != null && userIngredient.getQuantity() >= requiredQuantity) {
+                availableIngredients.add(requiredIngredient);
+                totalQuality += userIngredient.getQuality();
+                matchedCount++;
+            } else {
+                // add to missingIngredients only if it's not already there
+                if (!missingIngredients.contains(requiredIngredient)) {
+                    missingIngredients.add(requiredIngredient);
+                }
             }
         }
+
+        double proportionMatched = (double) matchedCount / totalIngredients;
+
+        // thresholds for different recipe sizes.
+        double threshold = totalIngredients <= 3 ? 0.5 :
+                        totalIngredients <= 6 ? 0.6 : 
+                        0.7;
+
+        if (proportionMatched >= threshold) {
+            return (totalQuality / matchedCount) * proportionMatched; 
+        }
+        return 0;
     }
-
-    double proportionMatched = (double) matchedCount / totalIngredients;
-
-    // thresholds for different recipe sizes.
-    double threshold = totalIngredients <= 3 ? 0.5 :
-                       totalIngredients <= 6 ? 0.6 : 
-                       0.7;
-
-    if (proportionMatched >= threshold) {
-        return (totalQuality / matchedCount) * proportionMatched; 
-    }
-    return 0;
-}
 
 
     private static Ingredient findUserIngredient(String ingredientName, List<Ingredient> userIngredients) {
@@ -82,16 +82,27 @@ public class RecipeRanking {
     }
 
     public static void displayRankedRecipes(int tenantId) {
+        List<RankedRecipe> rankedRecipes = rankRecipes(tenantId);
+        for (RankedRecipe rankRecipe : rankedRecipes) {
+            Recipe theRecipe = rankRecipe.getRecipe();
+            System.out.println("------------------------------------------------");
+                System.out.println("Recipe: " + theRecipe.getName());
+                System.out.println("Ingredients: " + String.join(", ", theRecipe.getIngredients()));
+                System.out.println("Proportion Matched: " + String.format("%.2f", rankRecipe.getProportionMatched()));
+                System.out.println("Quality Score: " + String.format("%.2f", rankRecipe.getQualityScore()));
+                System.out.println("Available Ingredients: " + String.join(", ", rankRecipe.getAvailableIngredients()));
+                System.out.println("Missing Ingredients: " + String.join(", ", rankRecipe.getMissingIngredients()));
+        }
+    }
+
+    public static void displayAllRecipesInfo(int tenantId) {
         // Get user's ingredients
         TenantIngredients tenantIngredients = new TenantIngredients(tenantId);
-        List<Ingredient> userIngredients = tenantIngredients.getIngredients();
+        ArrayList<Ingredient> userIngredients = tenantIngredients.getIngredients();
     
         // Load recipes
         LoadRecipes recipeLoader = new LoadRecipes();
         ArrayList<Recipe> allRecipes = recipeLoader.getRecipesfromJSON();
-    
-        // Convert List<Ingredient> to ArrayList<Ingredient>
-        ArrayList<Ingredient> userIngredientsArrayList = new ArrayList<>(userIngredients);
     
         // Display recipes the user can make
         System.out.println("Recipes the user can make:");
@@ -104,7 +115,7 @@ public class RecipeRanking {
             List<String> missingIngredients = new ArrayList<>();
     
             // Calculate the proportion matched and quality score
-            double qualityScore = calculateRecipeQuality(recipe, userIngredientsArrayList, availableIngredients, missingIngredients);
+            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
             double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
             double threshold = recipe.getThreshold();
     
@@ -140,7 +151,7 @@ public class RecipeRanking {
             List<String> missingIngredients = new ArrayList<>();
     
             // Calculate the proportion matched and quality score
-            double qualityScore = calculateRecipeQuality(recipe, userIngredientsArrayList, availableIngredients, missingIngredients);
+            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
             double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
             double threshold = recipe.getThreshold();
     
@@ -175,12 +186,14 @@ public class RecipeRanking {
 class RankedRecipe {
     private Recipe recipe;
     private double qualityScore;
+    private double proportionMatched;
     private List<String> availableIngredients;
     private List<String> missingIngredients;
 
-    public RankedRecipe(Recipe recipe, double qualityScore, List<String> availableIngredients, List<String> missingIngredients) {
+    public RankedRecipe(Recipe recipe, double qualityScore, double proportionMatched, List<String> availableIngredients, List<String> missingIngredients) {
         this.recipe = recipe;
         this.qualityScore = qualityScore;
+        this.proportionMatched = proportionMatched;
         this.availableIngredients = availableIngredients;
         this.missingIngredients = missingIngredients;
     }
@@ -191,6 +204,10 @@ class RankedRecipe {
 
     public double getQualityScore() {
         return qualityScore;
+    }
+
+    public double getProportionMatched() {
+        return proportionMatched;
     }
 
     public List<String> getAvailableIngredients() {
