@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,13 +19,14 @@ public class RecipeRanking {
         for (Recipe recipe : recipes) {
             List<String> availableIngredients = new ArrayList<>();
             List<String> missingIngredients = new ArrayList<>();
+            List<Integer> ingedientQuantities = new ArrayList<>();
 
-            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
+            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients, ingedientQuantities);
             double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
             double threshold = recipe.getThreshold();
 
             if (proportionMatched >= threshold) {
-                rankedRecipes.add(new RankedRecipe(recipe, qualityScore, proportionMatched, availableIngredients, missingIngredients));
+                rankedRecipes.add(new RankedRecipe(recipe, qualityScore, proportionMatched, availableIngredients, missingIngredients, ingedientQuantities));
             }
         }
 
@@ -35,7 +37,8 @@ public class RecipeRanking {
     }
 
     private static double calculateRecipeQuality(Recipe recipe, List<Ingredient> userIngredients,
-                                             List<String> availableIngredients, List<String> missingIngredients) {
+                                             List<String> availableIngredients, List<String> missingIngredients, 
+                                             List<Integer> ingredientQuantities) {
         String[] recipeIngredients = recipe.getIngredients();
         int[] requiredQuantities = recipe.getQuantities();
 
@@ -53,10 +56,12 @@ public class RecipeRanking {
                 availableIngredients.add(requiredIngredient);
                 totalQuality += userIngredient.getQuality();
                 matchedCount++;
+                ingredientQuantities.add(userIngredient.getQuantity());
             } else {
                 // add to missingIngredients only if it's not already there
                 if (!missingIngredients.contains(requiredIngredient)) {
                     missingIngredients.add(requiredIngredient);
+                    ingredientQuantities.add(0);
                 }
             }
         }
@@ -80,6 +85,17 @@ public class RecipeRanking {
         return null;
     }
 
+    private static String[] intListToStringArr(List<Integer> intList) {
+        int s = intList.size();
+        String[] stringArr = new String[s];
+
+        for (int i = 0; i < s; i++) {
+            stringArr[i] = String.valueOf(intList.get(i));
+        }
+
+        return stringArr;
+    }
+
     public static void displayRankedRecipes(int tenantId) {
         List<RankedRecipe> rankedRecipes = rankRecipes(tenantId);
         System.out.println("Recommended recipes:");
@@ -89,13 +105,17 @@ public class RecipeRanking {
 
         for (RankedRecipe rankRecipe : rankedRecipes) {
             Recipe theRecipe = rankRecipe.getRecipe();
+            List<Integer> quantitiesList = Arrays.stream(theRecipe.getQuantities()).boxed().toList();
+            String[] recipeQuantities = intListToStringArr(quantitiesList);
+            String[] quantities = intListToStringArr(rankRecipe.getUserQuantities());
             System.out.println("------------------------------------------------");
             System.out.println("Recipe: " + theRecipe.getName());
             System.out.println("Ingredients: " + String.join(", ", theRecipe.getIngredients()));
+            System.out.println("Required quantities: " + String.join(", ", recipeQuantities));
+            System.out.println("Your quantities: " + String.join(", ", quantities));
+            System.out.println("Recipe instructions: " + theRecipe.getInstructions());
             System.out.println("Proportion Matched: " + String.format("%.2f", rankRecipe.getProportionMatched()));
             System.out.println("Quality Score: " + String.format("%.2f", rankRecipe.getQualityScore()));
-            System.out.println("Available Ingredients: " + String.join(", ", rankRecipe.getAvailableIngredients()));
-            System.out.println("Missing Ingredients: " + String.join(", ", rankRecipe.getMissingIngredients()));
         }
     }
 
@@ -117,20 +137,27 @@ public class RecipeRanking {
             // Prepare lists for available and missing ingredients
             List<String> availableIngredients = new ArrayList<>();
             List<String> missingIngredients = new ArrayList<>();
+            List<Integer> ingredientQuantities = new ArrayList<>();
     
             // Calculate the proportion matched and quality score
-            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
+            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients, ingredientQuantities);
             double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
             double threshold = recipe.getThreshold();
     
             // Check if the user can make this recipe (proportion matched >= threshold)
             if (proportionMatched >= threshold) {
                 anyCanMakeRecipes = true;
+                List<Integer> quantitiesList = Arrays.stream(recipe.getQuantities()).boxed().toList();
+                String[] recipeQuantities = intListToStringArr(quantitiesList);
+                String[] quantities = intListToStringArr(ingredientQuantities);
     
                 // Display recipe details
                 System.out.println("------------------------------------------------");
                 System.out.println("Recipe: " + recipe.getName());
                 System.out.println("Ingredients: " + String.join(", ", recipe.getIngredients()));
+                System.out.println("Required quantities: " + String.join(", ", recipeQuantities));
+                System.out.println("Your quantities: " + String.join(", ", quantities));
+                System.out.println("Recipe instructions: " + recipe.getInstructions());
                 System.out.println("Threshold: " + threshold);
                 System.out.println("Proportion Matched: " + String.format("%.2f", proportionMatched));
                 System.out.println("Quality Score: " + String.format("%.2f", qualityScore));
@@ -153,20 +180,27 @@ public class RecipeRanking {
             // Prepare lists for available and missing ingredients
             List<String> availableIngredients = new ArrayList<>();
             List<String> missingIngredients = new ArrayList<>();
+            List<Integer> ingredientQuantities = new ArrayList<>();
     
             // Calculate the proportion matched and quality score
-            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients);
+            double qualityScore = calculateRecipeQuality(recipe, userIngredients, availableIngredients, missingIngredients, ingredientQuantities);
             double proportionMatched = (double) availableIngredients.size() / recipe.getIngredients().length;
             double threshold = recipe.getThreshold();
     
             // Check if the user cannot make this recipe (proportion matched < threshold)
             if (proportionMatched < threshold) {
                 anyCannotMakeRecipes = true;
+                List<Integer> quantitiesList = Arrays.stream(recipe.getQuantities()).boxed().toList();
+                String[] recipeQuantities = intListToStringArr(quantitiesList);
+                String[] quantities = intListToStringArr(ingredientQuantities);
     
                 // Display recipe details
                 System.out.println("------------------------------------------------");
                 System.out.println("Recipe: " + recipe.getName());
                 System.out.println("Ingredients: " + String.join(", ", recipe.getIngredients()));
+                System.out.println("Required quantities: " + String.join(", ", recipeQuantities));
+                System.out.println("Your quantities: " + String.join(", ", quantities));
+                System.out.println("Recipe instructions: " + recipe.getInstructions());
                 System.out.println("Threshold: " + threshold);
                 System.out.println("Proportion Matched: " + String.format("%.2f", proportionMatched));
                 System.out.println("Quality Score: " + String.format("%.2f", qualityScore));
@@ -193,13 +227,16 @@ class RankedRecipe {
     private double proportionMatched;
     private List<String> availableIngredients;
     private List<String> missingIngredients;
+    private List<Integer> userQuantities; // A list of the quantities the user has, since the recipe already stores the required quantities
 
-    public RankedRecipe(Recipe recipe, double qualityScore, double proportionMatched, List<String> availableIngredients, List<String> missingIngredients) {
+    public RankedRecipe(Recipe recipe, double qualityScore, double proportionMatched, List<String> availableIngredients, 
+                                                                List<String> missingIngredients, List<Integer> userQuantities) {
         this.recipe = recipe;
         this.qualityScore = qualityScore;
         this.proportionMatched = proportionMatched;
         this.availableIngredients = availableIngredients;
         this.missingIngredients = missingIngredients;
+        this.userQuantities = userQuantities;
     }
 
     public Recipe getRecipe() {
@@ -220,5 +257,9 @@ class RankedRecipe {
 
     public List<String> getMissingIngredients() {
         return missingIngredients;
+    }
+
+    public List<Integer> getUserQuantities() {
+        return userQuantities;
     }
 }
