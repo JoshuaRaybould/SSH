@@ -38,8 +38,11 @@ jobs:
       - name: "Setup for integration tests"
         run: ./gradlew installDist
 
-      - name: "Integration test" # some of the above tests may class as integration tests but this certainly should be
+      - name: "Ingredients integration test" 
         run: python3 ./integrationTests/ingredientsTests.py
+
+      - name: "Recipes integration test"
+        run: python3 ./integrationTests/recipesTest.py
         
       - name: "Test coverage"
         run: ./gradlew jacocoTestCoverageVerification

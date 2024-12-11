@@ -1,15 +1,18 @@
 Tenant with id 10, Jamal, has the following ingedients
-Name:Milk, Quantity:1000, Quality:0.0
-Name:Eggs, Quantity:12, Quality:0.0
-Name:Bacon, Quantity:6, Quality:0.0
-Name:Sweetcorn, Quantity:3, Quality:0.0
-Name:Salad, Quantity:500, Quality:0.0
-Name:Honey, Quantity:500, Quality:0.0
-Name:Jam, Quantity:500, Quality:0.0
-Name:Sugar, Quantity:1000, Quality:0.0
-Name:Rice, Quantity:2000, Quality:0.0
-Name:Bread, Quantity:1, Quality:0.0
-Name:Oil, Quantity:2000, Quality:0.0
-Name:Salt, Quantity:500, Quality:0.0
-Name:Black Pepper, Quantity:500, Quality:0.0
-Name:Paprika, Quantity:500, Quality:0.0
+Name:Milk           Quantity:1000  Quality:30.0
+Name:Eggs           Quantity:12    Quality:50.0
+Name:Chicken        Quantity:1     Quality:80.0
+Name:Bacon          Quantity:6     Quality:44.0
+Name:Garlic         Quantity:12    Quality:80.0
+Name:Lemons         Quantity:8     Quality:80.0
+Name:Sweetcorn      Quantity:3     Quality:70.0
+Name:Salad          Quantity:500   Quality:60.0
+Name:Honey          Quantity:500   Quality:49.0
+Name:Jam            Quantity:500   Quality:60.0
+Name:Sugar          Quantity:1000  Quality:30.0
+Name:Rice           Quantity:2000  Quality:35.0
+Name:Bread          Quantity:1     Quality:40.0
+Name:Oil            Quantity:2000  Quality:80.0
+Name:Salt           Quantity:500   Quality:58.0
+Name:Black Pepper   Quantity:500   Quality:80.0
+Name:Paprika        Quantity:500   Quality:41.0

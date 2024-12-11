@@ -1,8 +1,8 @@
 package org.example;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -36,18 +36,12 @@ public class LoadRecipes {
 
         ArrayList<Recipe> recipeList = new ArrayList<>();
 
-        
-        URL url = getClass().getResource("/recipes.json");
-        File fullfile = new File(url.getPath());
-
         //reads the entire json recipe file and puts it into string format
-        byte[] file = new byte[(int) fullfile.length()];
-        try (FileInputStream inputStream = new FileInputStream(fullfile)) {
-                inputStream.read(file);
-            
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("recipes.json");
+        String jsonRecipeData;
+        try {
+            jsonRecipeData = new String(in.readAllBytes(), StandardCharsets.UTF_8);
 
-            String jsonRecipeData = new String(file);
-            
             //gets each recipe as an object and add it to the json recipe array which is a json array
             JSONObject object = new JSONObject(jsonRecipeData);
             JSONArray jsonRecipeArray = object.getJSONArray("recipes");
@@ -72,7 +66,7 @@ public class LoadRecipes {
                 }
                 recipeList.add(new Recipe(recipe_name, recipe_instructions, ingredients, quantity));//creates and adds a new recipe object into recipe list
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
             

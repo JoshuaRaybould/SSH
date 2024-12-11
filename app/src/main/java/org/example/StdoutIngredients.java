@@ -11,7 +11,9 @@ public class StdoutIngredients implements IIngredientsOutput {
         } else {
             System.out.println("Tenant with id " + tenantId + ", " + tenant.getTenantName() + ", has the following ingedients");
             for (Ingredient ingredient: tenantIngredients.getIngredients()) {
-                System.out.println("Name:" + ingredient.getName() + ", Quantity:" + ingredient.getQuantity() + ", Quality:" + ingredient.getQuality());
+                String ingredientString = String.format("%-15s", (ingredient.getName()));
+                String ingredientQuantity = String.format("%-6s", ingredient.getQuantity());
+                System.out.println("Name:" + ingredientString + "Quantity:" + ingredientQuantity + "Quality:" + ingredient.getQuality());
             }
         }
     }

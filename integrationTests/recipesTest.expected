@@ -1,0 +1,50 @@
+Recommended recipes:
+------------------------------------------------
+Recipe: Lemon Chicken
+Ingredients: Chicken, Lemons, Garlic, Oil, Black Pepper
+Proportion Matched: 1.00
+Quality Score: 80.00
+Available Ingredients: Chicken, Lemons, Garlic, Oil, Black Pepper
+Missing Ingredients: 
+------------------------------------------------
+Recipe: Bacon and Cheese Omelette
+Ingredients: Bacon, Eggs, Cheese, Salt, Black Pepper
+Proportion Matched: 0.80
+Quality Score: 46.40
+Available Ingredients: Bacon, Eggs, Salt, Black Pepper
+Missing Ingredients: Cheese
+------------------------------------------------
+Recipe: Tomato and Basil Pasta
+Ingredients: Pasta, Garlic, Oil, Tomato Puree, Black Pepper
+Proportion Matched: 0.60
+Quality Score: 48.00
+Available Ingredients: Garlic, Oil, Black Pepper
+Missing Ingredients: Pasta, Tomato Puree
+------------------------------------------------
+Recipe: Avocado Salad
+Ingredients: Avocado, Salad Leaves, Lemons, Salt, Black Pepper
+Proportion Matched: 0.60
+Quality Score: 43.60
+Available Ingredients: Lemons, Salt, Black Pepper
+Missing Ingredients: Avocado, Salad Leaves
+------------------------------------------------
+Recipe: Chicken and Rice Bowl
+Ingredients: Chicken, Rice, Bell Peppers, Oil, Soy Sauce
+Proportion Matched: 0.60
+Quality Score: 39.00
+Available Ingredients: Chicken, Rice, Oil
+Missing Ingredients: Bell Peppers, Soy Sauce
+------------------------------------------------
+Recipe: Garlic Butter Prawns with Rice
+Ingredients: Prawns, Butter, Garlic, Lemons, Rice
+Proportion Matched: 0.60
+Quality Score: 39.00
+Available Ingredients: Garlic, Lemons, Rice
+Missing Ingredients: Prawns, Butter
+------------------------------------------------
+Recipe: Spaghetti Carbonara
+Ingredients: Spaghetti, Bacon, Eggs, Cheese, Black Pepper
+Proportion Matched: 0.60
+Quality Score: 34.80
+Available Ingredients: Bacon, Eggs, Black Pepper
+Missing Ingredients: Spaghetti, Cheese
